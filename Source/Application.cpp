@@ -1,8 +1,11 @@
 #include "../Include/Application.hpp"
+#include "../Include/Menu.hpp"
+#include "../Include/Game.hpp"
 
 const sf::Time Application::secondsFramesRatio = sf::seconds(1.f/60.f);
 
-Application::Application() : window(sf::VideoMode(800,576), "NukeOut!") {
+Application::Application() : window(sf::VideoMode(800,576), "NukeOut!"), menuState(window), gameState(window) {
+	currentState = &menuState;
 }
 
 void Application::run() {
@@ -28,15 +31,23 @@ void Application::processInput() {
 		} else if (event.type == sf::Event::KeyPressed) {
 			if (event.key.code == sf::Keyboard::Q) {
 				window.close();
+			} else {
+				if (!currentState->processInput(event)) {
+					if (currentState == &menuState) {
+						currentState = &gameState;
+					} else if (currentState == &gameState) {
+						currentState = &menuState;
+					}
+				}
 			}
 		}
 	}
 }
 
 void Application::update(sf::Time delta) {
+	currentState->update(delta);
 }
 
 void Application::render() {
-	window.clear();
-	window.display();
+	currentState->render();
 }

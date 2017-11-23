@@ -6,6 +6,10 @@
 
 #include <vector>
 
+#include "State.hpp"
+#include "Menu.hpp"
+#include "Game.hpp"
+
 class Application {
 public:
 	Application();
@@ -19,6 +23,10 @@ private:
 private:
 	sf::RenderWindow window;
 	static const sf::Time secondsFramesRatio;
+	
+	State* currentState;
+	Menu menuState;
+	Game gameState;
 };
 
 #endif

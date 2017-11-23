@@ -16,7 +16,7 @@ CONFIGURE_FILE(
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
 
 SET(EXECUTABLE_NAME "NukeOut")
-ADD_EXECUTABLE(${EXECUTABLE_NAME} Source/Main.cpp Source/Application.cpp)
+ADD_EXECUTABLE(${EXECUTABLE_NAME} Source/Main.cpp Source/Application.cpp Source/Game.cpp Source/Menu.cpp)
 
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake_Modules" ${CMAKE_MODULE_PATH})
 
