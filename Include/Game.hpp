@@ -1,12 +1,13 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <vector>
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
 #include "State.hpp"
-
-typedef unsigned int Level;
+#include "Level.hpp"
 
 class Game : public sf::NonCopyable, public State {
 public:
@@ -17,10 +18,17 @@ public:
 	void render();
 	
 private:
+	void selectLevel(unsigned int);
+	void nextLevel();
+	void previousLevel();
+	
+	void setupLevels();
+	
 	sf::RenderWindow& window;
 	sf::FloatRect bounds;
 	
-	Level currentLevel;
+	Level* currentLevel;
+	std::vector<Level> levels;
 	bool gameOver;
 };
 
