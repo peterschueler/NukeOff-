@@ -8,6 +8,7 @@ struct Tile {
 	int x,y;
 	enum class Type {
 		Default,
+		Hard,
 		LifeUp,
 		SpeedUp,
 		SpeedDown,
@@ -19,7 +20,11 @@ struct Tile {
 		Green,
 		Blue,
 		Yellow,
+		Purple,
+		White,
 	};
+	Type type;
+	Color color;
 };
 
 class Level {
@@ -38,6 +43,7 @@ public:
 	
 private:
 	std::vector<Tile> loadFromFile(std::string);
+	Tile tokensToTile(std::vector<std::string>);
 
 	unsigned int number;
 	std::vector<Tile> tiles;
