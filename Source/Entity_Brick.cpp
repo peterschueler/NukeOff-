@@ -14,50 +14,31 @@ std::pair<int, int> convertTileSpaceToRealSpace(Tile tile) {
 	std::map<int, std::pair<int, int> > vals;
 	int combValue = combine(tile.y, tile.x);
 	std::cout << combValue << std::endl;
-	vals.insert(std::pair<int, std::pair<int, int> >(21, {160,60}));
-	vals.insert(std::pair<int, std::pair<int, int> >(22, {160,80}));
-	vals.insert(std::pair<int, std::pair<int, int> >(23, {160,100}));
-	vals.insert(std::pair<int, std::pair<int, int> >(24, {160,120}));
-	vals.insert(std::pair<int, std::pair<int, int> >(25, {160,140}));
-	vals.insert(std::pair<int, std::pair<int, int> >(26, {160,160}));
-	vals.insert(std::pair<int, std::pair<int, int> >(27, {160,180}));
-	vals.insert(std::pair<int, std::pair<int, int> >(28, {160,200}));
 	
-	vals.insert(std::pair<int, std::pair<int, int> >(31, {140,60}));
-	vals.insert(std::pair<int, std::pair<int, int> >(32, {140,80}));
-	vals.insert(std::pair<int, std::pair<int, int> >(33, {140,100}));
-	vals.insert(std::pair<int, std::pair<int, int> >(34, {140,120}));
-	vals.insert(std::pair<int, std::pair<int, int> >(35, {140,140}));
-	vals.insert(std::pair<int, std::pair<int, int> >(36, {140,160}));
-	vals.insert(std::pair<int, std::pair<int, int> >(37, {140,180}));
-	vals.insert(std::pair<int, std::pair<int, int> >(38, {140,200}));
-
-	vals.insert(std::pair<int, std::pair<int, int> >(41, {120,60}));
-	vals.insert(std::pair<int, std::pair<int, int> >(42, {120,80}));
-	vals.insert(std::pair<int, std::pair<int, int> >(43, {120,100}));
-	vals.insert(std::pair<int, std::pair<int, int> >(44, {120,120}));
-	vals.insert(std::pair<int, std::pair<int, int> >(45, {120,140}));
-	vals.insert(std::pair<int, std::pair<int, int> >(46, {120,160}));
-	vals.insert(std::pair<int, std::pair<int, int> >(47, {120,180}));
-	vals.insert(std::pair<int, std::pair<int, int> >(48, {120,200}));
-	
-	vals.insert(std::pair<int, std::pair<int, int> >(51, {100,60}));
-	vals.insert(std::pair<int, std::pair<int, int> >(52, {100,80}));
-	vals.insert(std::pair<int, std::pair<int, int> >(53, {100,100}));
-	vals.insert(std::pair<int, std::pair<int, int> >(54, {100,120}));
-	vals.insert(std::pair<int, std::pair<int, int> >(55, {100,140}));
-	vals.insert(std::pair<int, std::pair<int, int> >(56, {100,160}));
-	vals.insert(std::pair<int, std::pair<int, int> >(57, {100,180}));
-	vals.insert(std::pair<int, std::pair<int, int> >(58, {100,200}));
-	
-	vals.insert(std::pair<int, std::pair<int, int> >(61, {80,60}));
-	vals.insert(std::pair<int, std::pair<int, int> >(62, {80,80}));
-	vals.insert(std::pair<int, std::pair<int, int> >(63, {80,100}));
-	vals.insert(std::pair<int, std::pair<int, int> >(64, {80,120}));
-	vals.insert(std::pair<int, std::pair<int, int> >(65, {80,140}));
-	vals.insert(std::pair<int, std::pair<int, int> >(66, {80,160}));
-	vals.insert(std::pair<int, std::pair<int, int> >(67, {80,180}));
-	vals.insert(std::pair<int, std::pair<int, int> >(68, {80,500}));
+	unsigned int xVal = 0;
+	unsigned int yVal = 40;
+	for (int it = 10; it < 70; it++) {
+		yVal += 20;
+		if (it > 10 && it < 20) {
+			xVal = 180;
+		} else if (it > 20 && it < 30) {
+			xVal = 160;
+		} else if (it > 30 && it < 40) {
+			xVal = 140;
+		} else if (it > 40 && it < 50) {
+			xVal = 120;
+		} else if (it > 50 && it < 60) {
+			xVal = 100;
+		} else if (it > 60 && it < 70) {
+			xVal = 80;
+		} else if (it > 70 && it < 80) {
+			xVal = 60;
+		}
+		vals.insert(std::pair<int, std::pair<int, int> >(it, {xVal,yVal}));
+		if (it % 10 == 0) {
+			yVal = 40;
+		}
+	}
 	
 	for (auto val : vals) {
 		if (combValue == val.first) {
