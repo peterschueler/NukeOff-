@@ -7,6 +7,7 @@
 #include "../Include/Entity_Brick.hpp"
 #include "../Include/Entity_Wall.hpp"
 #include "../Include/Entity_Paddle.hpp"
+#include "../Include/Entity_Ball.hpp"
 
 Game::Game(sf::RenderWindow& win) : window(win), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), upperBorder(40), lowerBorder(200) {
 	initializeLevels();	
@@ -25,6 +26,8 @@ bool Game::processInput(sf::Event& event) {
 			paddle->moveUp(-60);
 		} else if (event.key.code == sf::Keyboard::L) {
 			paddle->setState(Entity_Paddle::Paddle_State::Long);
+		} else if (event.key.code == sf::Keyboard::Space) {
+			ball->setDirection(20, 30);
 		}
 	} else if (event.type == sf::Event::KeyReleased) {
 		if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Up) {
@@ -39,6 +42,7 @@ bool Game::update(sf::Time delta) {
 		return false;
 	}
 	paddle->update(delta);
+	ball->update(delta);
 	checkCollisions();
 	return true;
 }
@@ -46,6 +50,7 @@ bool Game::update(sf::Time delta) {
 void Game::render() {
 	window.clear(sf::Color::Black);
 	window.draw(*paddle);
+	window.draw(*ball);
 	for (auto brick : bricks) {
 		window.draw(*brick);
 	}
@@ -115,6 +120,9 @@ void Game::setupLevel(unsigned int number, Level* level) {
 	}
 	paddle = new Entity_Paddle();
 	paddle->setPosition(300, 100);
+	
+	ball = new Entity_Ball();
+	ball->setPosition(280, 80);
 }
 
 void Game::checkCollisions() {
@@ -123,5 +131,36 @@ void Game::checkCollisions() {
 	}
 	if (paddle->getAdjustedPosition().y >= lowerBorder) {
 		paddle->setAdjustedPosition(paddle->getAdjustedPosition().x, lowerBorder);
+	}
+	if (paddle->borders().intersects(ball->borders())) {
+		sf::Vector2f padDir = paddle->getDirection();
+		if (padDir.y == 0) {
+			ball->setDirection(-ball->getDirection().y, ball->getDirection().x);
+		} else {
+			ball->setDirection(-ball->getDirection().x, padDir.y);
+		}
+	}
+	for (auto iter = bricks.begin(); iter != bricks.end(); ++iter) {
+		Entity_Brick* br = *iter;
+		if (br->borders().intersects(ball->borders())) {
+			sf::Vector2f ballDir = ball->getDirection();
+			if (ballDir.x >= 0) {
+				ball->setDirection(-ball->getDirection().x, -ball->getDirection().y);
+			} else {
+				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);	
+			}
+		}
+	}
+	
+	for (auto iter = walls.begin(); iter != walls.end(); ++iter) {
+		Entity_Wall* wl = *iter;
+		if (wl->borders().intersects(ball->borders())) {
+			sf::Vector2f ballDir = ball->getDirection();
+			if (ballDir.x >= 0) {
+				ball->setDirection(-ball->getDirection().x, -ball->getDirection().y);
+			} else {
+				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);	
+			}
+		}
 	}
 }

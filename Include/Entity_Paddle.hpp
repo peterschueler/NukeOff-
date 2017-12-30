@@ -22,6 +22,9 @@ public:
 	void setState(Entity_Paddle::Paddle_State);
 	
 	void moveUp(float);
+	sf::Vector2f getDirection() const {
+		return direction;
+	};
 	void stop();
 	
 protected:

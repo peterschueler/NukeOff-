@@ -12,6 +12,7 @@
 class Entity_Brick;
 class Entity_Wall;
 class Entity_Paddle;
+class Entity_Ball;
 
 class Game : public sf::NonCopyable, public State {
 public:
@@ -39,6 +40,7 @@ private:
 	std::vector<Entity_Brick*> bricks;
 	std::vector<Entity_Wall*> walls;
 	Entity_Paddle* paddle;
+	Entity_Ball* ball;
 	bool gameOver;
 	
 	float upperBorder;
