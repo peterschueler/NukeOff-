@@ -11,6 +11,7 @@
 
 class Entity_Brick;
 class Entity_Wall;
+class Entity_Paddle;
 
 class Game : public sf::NonCopyable, public State {
 public:
@@ -28,6 +29,8 @@ private:
 	void initializeLevels();
 	void setupLevel(unsigned int, Level*);
 	
+	void checkCollisions();
+	
 	sf::RenderWindow& window;
 	sf::FloatRect bounds;
 	
@@ -35,7 +38,11 @@ private:
 	std::vector<Level*> levels;
 	std::vector<Entity_Brick*> bricks;
 	std::vector<Entity_Wall*> walls;
+	Entity_Paddle* paddle;
 	bool gameOver;
+	
+	float upperBorder;
+	float lowerBorder;
 };
 
 #endif

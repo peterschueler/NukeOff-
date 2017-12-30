@@ -13,7 +13,6 @@ int combine(int a, int b) {
 std::pair<int, int> convertTileSpaceToRealSpace(Tile tile) {
 	std::map<int, std::pair<int, int> > vals;
 	int combValue = combine(tile.y, tile.x);
-	std::cout << combValue << std::endl;
 	
 	unsigned int xVal = 0;
 	unsigned int yVal = 40;

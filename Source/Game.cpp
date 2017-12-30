@@ -6,17 +6,30 @@
 
 #include "../Include/Entity_Brick.hpp"
 #include "../Include/Entity_Wall.hpp"
+#include "../Include/Entity_Paddle.hpp"
 
-Game::Game(sf::RenderWindow& win) : window(win), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false) {
+Game::Game(sf::RenderWindow& win) : window(win), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), upperBorder(40), lowerBorder(200) {
 	initializeLevels();	
 	setupLevel(0, currentLevel);
 }
 
 bool Game::processInput(sf::Event& event) {
-	if (event.key.code == sf::Keyboard::Escape) {
-		return false;
-	} else if (event.key.code == sf::Keyboard::F) {
-		selectLevel(0);
+	if (event.type == sf::Event::KeyPressed) {
+		if (event.key.code == sf::Keyboard::Escape) {
+			return false;
+		} else if (event.key.code == sf::Keyboard::F) {
+			selectLevel(0);
+		} else if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down) {
+			paddle->moveUp(60);
+		} else if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
+			paddle->moveUp(-60);
+		} else if (event.key.code == sf::Keyboard::L) {
+			paddle->setState(Entity_Paddle::Paddle_State::Long);
+		}
+	} else if (event.type == sf::Event::KeyReleased) {
+		if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Up) {
+			paddle->stop();
+		} 
 	}
 	return true;
 }
@@ -25,12 +38,14 @@ bool Game::update(sf::Time delta) {
 	if (gameOver) {
 		return false;
 	}
-	
+	paddle->update(delta);
+	checkCollisions();
 	return true;
 }
 
 void Game::render() {
 	window.clear(sf::Color::Black);
+	window.draw(*paddle);
 	for (auto brick : bricks) {
 		window.draw(*brick);
 	}
@@ -81,7 +96,6 @@ void Game::initializeLevels() {
 }
 
 void Game::setupLevel(unsigned int number, Level* level) {
-	std::cout << levels.size() << std::endl;
 	for (auto lvl : levels) {
 		if (lvl->getNumber() == number) {
 			level = lvl;
@@ -98,5 +112,16 @@ void Game::setupLevel(unsigned int number, Level* level) {
 	for (auto wall : level->getWallTiles()) {
 		Entity_Wall* wl = new Entity_Wall(wall, number);
 		walls.push_back(wl);
+	}
+	paddle = new Entity_Paddle();
+	paddle->setPosition(300, 100);
+}
+
+void Game::checkCollisions() {
+	if (paddle->getPosition().y <= upperBorder) {
+		paddle->setPosition(paddle->getPosition().x, upperBorder);
+	}
+	if (paddle->getAdjustedPosition().y >= lowerBorder) {
+		paddle->setAdjustedPosition(paddle->getAdjustedPosition().x, lowerBorder);
 	}
 }
