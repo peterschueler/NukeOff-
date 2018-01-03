@@ -104,7 +104,6 @@ void Entity_Brick::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void Entity_Brick::attachTexture() {
 	sf::IntRect rect = sf::IntRect(0,0,15,20);
 	txtManager->load(tile.type);
-	texture = txtManager->get(tile.type);
-	sprite.setTexture(texture);
+	sprite.setTexture(txtManager->get(tile.type));
 	sprite.setTextureRect(rect);
 }
