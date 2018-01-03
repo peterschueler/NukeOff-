@@ -1,4 +1,5 @@
 #include "../Include/Entity_Brick.hpp"
+#include "../Include/TextureManager.hpp"
 
 #include <iostream>
 
@@ -53,9 +54,10 @@ Entity_Brick::Entity_Brick(): sprite(), isDestroyed(false) {
 	tile.type = Tile::Type::Default;
 	setDestructable(true);
 	attachTexture();
+	txtManager = new TextureManager();
 }
 
-Entity_Brick::Entity_Brick(Tile tile): sprite(), isDestroyed(false), tile(tile) {
+Entity_Brick::Entity_Brick(Tile tile, TextureManager& mgr): sprite(), isDestroyed(false), tile(tile), txtManager(&mgr) {
 	if (tile.type == Tile::Type::Brick_Hard) {
 		setDestructable(false);
 	} else {
@@ -100,37 +102,9 @@ void Entity_Brick::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 void Entity_Brick::attachTexture() {
-	std::string filePath = "Assets/Textures/Bricks/Default/Brick_";
-	if (tile.type == Tile::Type::Brick_Basic_Red) {
-		filePath = filePath + "Red.png";
-	} else if (tile.type == Tile::Type::Brick_Basic_Red) {
-		filePath = filePath + "Green.png";
-	} else if (tile.type == Tile::Type::Brick_Basic_Blue) {
-		filePath = filePath + "Blue.png";
-	} else if (tile.type == Tile::Type::Brick_Basic_Yellow) {
-		filePath = filePath + "Yellow.png";
-	} else if (tile.type == Tile::Type::Brick_Basic_Purple) {
-		filePath = filePath + "Purple.png";
-	} else if (tile.type == Tile::Type::Brick_Basic_White) {
-		filePath = filePath + "White.png";
-	} else if (tile.type == Tile::Type::Brick_Hard) {
-		filePath = filePath + "Hard.png";
-	} else if (tile.type == Tile::Type::Brick_LifeUp) {
-		filePath = filePath + "LifeUp.png";
-	} else if (tile.type == Tile::Type::Brick_SpeedUp) {
-		filePath = filePath + "SpeedUp.png";
-	} else if (tile.type == Tile::Type::Brick_SpeedDown) {
-		filePath = filePath + "SpeedDown.png";
-	} else if (tile.type == Tile::Type::Brick_Bomb) {
-		filePath = filePath + "Bomb.png";
-	} else if (tile.type == Tile::Type::Brick_Nuke) {
-		filePath = filePath + "Nuke.png";
-	}
 	sf::IntRect rect = sf::IntRect(0,0,15,20);
-	if (texture.loadFromFile(filePath)) {
-		sprite.setTexture(texture);
-		sprite.setTextureRect(rect);
-	} else {
-		std::cerr << "Couldn't load " << filePath << ". Did you misplace the texture file?"<< std::endl; 
-	}
+	txtManager->load(tile.type);
+	texture = txtManager->get(tile.type);
+	sprite.setTexture(texture);
+	sprite.setTextureRect(rect);
 }

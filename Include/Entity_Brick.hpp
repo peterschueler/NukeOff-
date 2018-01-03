@@ -6,14 +6,16 @@
 
 #include <map>
 
+class TextureManager;
+
 std::pair<int, int> convertTileSpaceToRealSpace(Tile);
 
 class Entity_Brick : public Entity {
 public:
 	Entity_Brick();
-	Entity_Brick(Tile);
+	Entity_Brick(Tile, TextureManager&);
 	// used for chrome
-	Entity_Brick(std::string);
+	Entity_Brick(std::string, TextureManager&);
 	
 	void update(sf::Time);
 	
@@ -36,10 +38,10 @@ private:
 	
 	Tile tile;
 	
-	
-	
 	bool isDestroyed;
 	bool isDestructable;
+	
+	TextureManager* txtManager;
 };
 
 #endif

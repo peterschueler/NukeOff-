@@ -14,6 +14,8 @@ class Entity_Wall;
 class Entity_Paddle;
 class Entity_Ball;
 
+class TextureManager;
+
 class Game : public sf::NonCopyable, public State {
 public:
 	explicit Game(sf::RenderWindow&);
@@ -45,6 +47,8 @@ private:
 	
 	float upperBorder;
 	float lowerBorder;
+	
+	TextureManager* txtManager;
 };
 
 #endif

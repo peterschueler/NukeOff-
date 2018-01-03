@@ -8,8 +8,17 @@
 #include "../Include/Entity_Wall.hpp"
 #include "../Include/Entity_Paddle.hpp"
 #include "../Include/Entity_Ball.hpp"
+#include "../Include/TextureManager.hpp"
 
 Game::Game(sf::RenderWindow& win) : window(win), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), upperBorder(40), lowerBorder(200) {
+	txtManager = new TextureManager();
+	
+	paddle = new Entity_Paddle();
+	paddle->setPosition(300, 100);
+	
+	ball = new Entity_Ball();
+	ball->setPosition(280, 80);
+	
 	initializeLevels();	
 	setupLevel(0, currentLevel);
 }
@@ -110,7 +119,7 @@ void Game::setupLevel(unsigned int number, Level* level) {
 		}
 	}
 	for (auto tile : level->getTiles()) {
-		Entity_Brick* br = new Entity_Brick(tile);
+		Entity_Brick* br = new Entity_Brick(tile, *txtManager);
 		bricks.push_back(br);
 	}
 	
@@ -118,11 +127,6 @@ void Game::setupLevel(unsigned int number, Level* level) {
 		Entity_Wall* wl = new Entity_Wall(wall, number);
 		walls.push_back(wl);
 	}
-	paddle = new Entity_Paddle();
-	paddle->setPosition(300, 100);
-	
-	ball = new Entity_Ball();
-	ball->setPosition(280, 80);
 }
 
 void Game::checkCollisions() {
@@ -140,15 +144,12 @@ void Game::checkCollisions() {
 			ball->setDirection(-ball->getDirection().x, padDir.y);
 		}
 	}
+	
 	for (auto iter = bricks.begin(); iter != bricks.end(); ++iter) {
 		Entity_Brick* br = *iter;
 		if (br->borders().intersects(ball->borders())) {
 			sf::Vector2f ballDir = ball->getDirection();
-			if (ballDir.x >= 0) {
-				ball->setDirection(-ball->getDirection().x, -ball->getDirection().y);
-			} else {
-				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);	
-			}
+			ball->setDirection(-ball->getDirection().x, -ball->getDirection().y);
 		}
 	}
 	
