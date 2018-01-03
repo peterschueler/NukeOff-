@@ -42,41 +42,35 @@ Tile Level::tokensToTile(std::vector<std::string> tokens) {
 	tile.x = std::stoi(tokens[0]);
 	tile.y = std::stoi(tokens[1]);
 	
-	auto type = tokens[2];
-	if (type == "D") {
-		tile.type = Tile::Type::Default;
+	auto type = tokens[2] + tokens[3];
+	if (type == "DR") {
+		tile.type = Tile::Type::Brick_Basic_Red;
+	} else if (type == "DG") {
+		tile.type = Tile::Type::Brick_Basic_Green;
+	} else if (type == "DB") {
+		tile.type = Tile::Type::Brick_Basic_Blue;
+	} else if (type == "DY") {
+		tile.type = Tile::Type::Brick_Basic_Yellow;
+	} else if (type == "DP") {
+		tile.type = Tile::Type::Brick_Basic_Purple;
+	} else if (type == "DW") {
+		tile.type = Tile::Type::Brick_Basic_White;
 	} else if (type == "H") {
-		tile.type = Tile::Type::Hard;
+		tile.type = Tile::Type::Brick_Hard;
 	} else if (type == "L") {
-		tile.type = Tile::Type::LifeUp;
+		tile.type = Tile::Type::Brick_LifeUp;
 	} else if (type == "U") {
-		tile.type = Tile::Type::SpeedUp;
+		tile.type = Tile::Type::Brick_SpeedUp;
 	} else if (type == "D") {
-		tile.type = Tile::Type::SpeedDown;
+		tile.type = Tile::Type::Brick_SpeedDown;
 	} else if (type == "B") {
-		tile.type = Tile::Type::Bomb;
+		tile.type = Tile::Type::Brick_Bomb;
 	} else if (type == "N") {
-		tile.type = Tile::Type::Nuke;
+		tile.type = Tile::Type::Brick_Nuke;
 	} else {
 		tile.type = Tile::Type::Default;
 	}
-	
-	auto color = tokens[3];
-	if (color == "R") {
-		tile.color = Tile::Color::Red;
-	} else if (color == "G") {
-		tile.color = Tile::Color::Green;
-	} else if (color == "B") {
-		tile.color = Tile::Color::Blue;	
-	} else if (color == "Y") {
-		tile.color = Tile::Color::Yellow;
-	} else if (color == "P") {
-		tile.color = Tile::Color::Purple;
-	} else if (color == "W") {
-		tile.color = Tile::Color::White;
-	} else {
-		tile.color = Tile::Color::Yellow;
-	}
+
 	return tile;
 }
 
@@ -85,11 +79,11 @@ void Level::buildWall() {
 		// left line small medium large {-90 rot}
 		// lower line: corner (270 rot) medium large small large small medium large {180 rot} corner (180 rot)
 		
-		std::vector<Wall_Tile> upperWalls = {Wall_Tile(0, 20, 0, "Corner"), Wall_Tile(20,20,0, "Medium"), Wall_Tile(50,20,0, "Long"), Wall_Tile(110,20,0,"Short"), Wall_Tile(130,20,0,"Long"), Wall_Tile(190,20,0,"Short"), Wall_Tile(210,20,0,"Long"), Wall_Tile(270,20,0,"Medium"), Wall_Tile(320, 20, 90, "Corner")};
+		std::vector<Tile> upperWalls = {Tile(0, 20, 0, Tile::Type::Wall_Corner_Yellow), Tile(20,20,0, Tile::Type::Wall_Medium_Yellow), Tile(50,20,0, Tile::Type::Wall_Long_Yellow), Tile(110,20,0,Tile::Type::Wall_Short_Yellow), Tile(130,20,0,Tile::Type::Wall_Long_Yellow), Tile(190,20,0,Tile::Type::Wall_Short_Yellow), Tile(210,20,0,Tile::Type::Wall_Long_Yellow), Tile(270,20,0,Tile::Type::Wall_Medium_Yellow), Tile(320, 20, 90, Tile::Type::Wall_Corner_Yellow)};
 		
-		std::vector<Wall_Tile> leftWalls = {Wall_Tile(0, 60, -90, "Short"), Wall_Tile(0, 90, -90, "Medium"), Wall_Tile(0, 150, -90, "Long"), Wall_Tile(0,180, -90, "Medium"), Wall_Tile(0,200, -90, "Short"), Wall_Tile(0, 220, -90, "Short")};
+		std::vector<Tile> leftWalls = {Tile(0, 60, -90, Tile::Type::Wall_Short_Yellow), Tile(0, 90, -90, Tile::Type::Wall_Medium_Yellow), Tile(0, 150, -90, Tile::Type::Wall_Long_Yellow), Tile(0,180, -90, Tile::Type::Wall_Medium_Yellow), Tile(0,200, -90, Tile::Type::Wall_Short_Yellow), Tile(0, 220, -90, Tile::Type::Wall_Short_Yellow)};
 		
-		std::vector<Wall_Tile> lowerWalls = {Wall_Tile(0, 240, 270, "Corner"), Wall_Tile(50,240,180, "Medium"), Wall_Tile(110,240,180, "Long"), Wall_Tile(130,240,180,"Short"), Wall_Tile(190,240,180,"Long"), Wall_Tile(210,240,180,"Short"),Wall_Tile(270,240,180,"Long"), Wall_Tile(300,240,180,"Medium"), Wall_Tile(320, 240, 180, "Corner")};
+		std::vector<Tile> lowerWalls = {Tile(0, 240, 270, Tile::Type::Wall_Corner_Yellow), Tile(50,240,180, Tile::Type::Wall_Medium_Yellow), Tile(110,240,180, Tile::Type::Wall_Long_Yellow), Tile(130,240,180,Tile::Type::Wall_Short_Yellow), Tile(190,240,180,Tile::Type::Wall_Long_Yellow), Tile(210,240,180,Tile::Type::Wall_Short_Yellow),Tile(270,240,180,Tile::Type::Wall_Long_Yellow), Tile(300,240,180,Tile::Type::Wall_Medium_Yellow), Tile(320, 240, 180, Tile::Type::Wall_Corner_Yellow)};
 		
 		walls.insert(walls.end(), upperWalls.begin(), upperWalls.end());
 		walls.insert(walls.end(), leftWalls.begin(), leftWalls.end());
@@ -108,6 +102,6 @@ std::vector<Tile> Level::getTiles() const {
 	return tiles;
 }
 
-std::vector<Wall_Tile> Level::getWallTiles() const {
+std::vector<Tile> Level::getWallTiles() const {
 	return walls;
 }

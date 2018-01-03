@@ -7,9 +7,9 @@
 class Entity_Wall : public Entity {
 public:
 	Entity_Wall();
-	Entity_Wall(Wall_Tile, unsigned int);
+	Entity_Wall(Tile, unsigned int);
 	// x, y, rotation, level
-	Entity_Wall(int, int, int, std::string, unsigned int);
+	Entity_Wall(int, int, int, Tile::Type, unsigned int);
 	
 	void update(sf::Time);
 	
@@ -23,7 +23,7 @@ private:
 	sf::Sprite sprite;
 	sf::Texture texture;
 	
-	Wall_Tile tile;
+	Tile tile;
 	
 	unsigned int level;
 };

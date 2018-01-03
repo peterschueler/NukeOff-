@@ -50,14 +50,13 @@ std::pair<int, int> convertTileSpaceToRealSpace(Tile tile) {
 Entity_Brick::Entity_Brick(): sprite(), isDestroyed(false) {
 	tile.x = 0;
 	tile.y = 0;
-	tile.color = Tile::Color::Yellow;
 	tile.type = Tile::Type::Default;
 	setDestructable(true);
 	attachTexture();
 }
 
 Entity_Brick::Entity_Brick(Tile tile): sprite(), isDestroyed(false), tile(tile) {
-	if (tile.type == Tile::Type::Hard) {
+	if (tile.type == Tile::Type::Brick_Hard) {
 		setDestructable(false);
 	} else {
 		setDestructable(true);
@@ -84,7 +83,7 @@ bool Entity_Brick::getDestroyed() const {
 }
 
 void Entity_Brick::setDestructable(bool destr) {
-	if (tile.type == Tile::Type::Hard) {
+	if (tile.type == Tile::Type::Brick_Hard) {
 		return;
 	}
 	isDestructable = destr;
@@ -102,31 +101,29 @@ void Entity_Brick::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Entity_Brick::attachTexture() {
 	std::string filePath = "Assets/Textures/Bricks/Default/Brick_";
-	if (tile.type == Tile::Type::Default) {
-		if (tile.color == Tile::Color::Red) {
-			filePath = filePath + "Red.png";
-		} else if (tile.color == Tile::Color::Green) {
-			filePath = filePath + "Green.png";
-		} else if (tile.color == Tile::Color::Blue) {
-			filePath = filePath + "Blue.png";
-		} else if (tile.color == Tile::Color::Yellow) {
-			filePath = filePath + "Yellow.png";
-		} else if (tile.color == Tile::Color::Purple) {
-			filePath = filePath + "Purple.png";
-		} else if (tile.color == Tile::Color::White) {
-			filePath = filePath + "White.png";
-		}
-	} else if (tile.type == Tile::Type::Hard) {
+	if (tile.type == Tile::Type::Brick_Basic_Red) {
+		filePath = filePath + "Red.png";
+	} else if (tile.type == Tile::Type::Brick_Basic_Red) {
+		filePath = filePath + "Green.png";
+	} else if (tile.type == Tile::Type::Brick_Basic_Blue) {
+		filePath = filePath + "Blue.png";
+	} else if (tile.type == Tile::Type::Brick_Basic_Yellow) {
+		filePath = filePath + "Yellow.png";
+	} else if (tile.type == Tile::Type::Brick_Basic_Purple) {
+		filePath = filePath + "Purple.png";
+	} else if (tile.type == Tile::Type::Brick_Basic_White) {
+		filePath = filePath + "White.png";
+	} else if (tile.type == Tile::Type::Brick_Hard) {
 		filePath = filePath + "Hard.png";
-	} else if (tile.type == Tile::Type::LifeUp) {
+	} else if (tile.type == Tile::Type::Brick_LifeUp) {
 		filePath = filePath + "LifeUp.png";
-	} else if (tile.type == Tile::Type::SpeedUp) {
+	} else if (tile.type == Tile::Type::Brick_SpeedUp) {
 		filePath = filePath + "SpeedUp.png";
-	} else if (tile.type == Tile::Type::SpeedDown) {
+	} else if (tile.type == Tile::Type::Brick_SpeedDown) {
 		filePath = filePath + "SpeedDown.png";
-	} else if (tile.type == Tile::Type::Bomb) {
+	} else if (tile.type == Tile::Type::Brick_Bomb) {
 		filePath = filePath + "Bomb.png";
-	} else if (tile.type == Tile::Type::Nuke) {
+	} else if (tile.type == Tile::Type::Brick_Nuke) {
 		filePath = filePath + "Nuke.png";
 	}
 	sf::IntRect rect = sf::IntRect(0,0,15,20);

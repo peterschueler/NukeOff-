@@ -6,12 +6,12 @@ Entity_Wall::Entity_Wall() : sprite(), level(0) {
 	attachTexture();
 }
 
-Entity_Wall::Entity_Wall(Wall_Tile wl, unsigned int lvl) : sprite(), tile(wl), level(lvl) {
+Entity_Wall::Entity_Wall(Tile wl, unsigned int lvl) : sprite(), tile(wl), level(lvl) {
 	attachTexture();
 	setPosition(wl.x, wl.y);
 }
 
-Entity_Wall::Entity_Wall(int x, int y, int rot, std::string ty, unsigned int lvl) : sprite(), tile(x,y,rot, ty), level(lvl) {
+Entity_Wall::Entity_Wall(int x, int y, int rot, Tile::Type ty, unsigned int lvl) : sprite(), tile(x,y,rot, ty), level(lvl) {
 	attachTexture();
 	setPosition(x, y);
 }
@@ -34,16 +34,16 @@ void Entity_Wall::attachTexture() {
 	std::string filePath = "Assets/Textures/Walls/" + std::to_string(level) + "/Wall_";
 	int x = 0;
 	int y = 20;
-	if (tile.type == Wall_Tile::Type::Long) {
+	if (tile.type == Tile::Type::Wall_Long_Yellow) {
 		filePath = filePath + "Long.png";
 		x = 60;
-	} else if (tile.type == Wall_Tile::Type::Medium) {
+	} else if (tile.type == Tile::Type::Wall_Medium_Yellow) {
 		filePath = filePath + "Medium.png";
 		x = 30;
-	} else if (tile.type == Wall_Tile::Type::Short) {
+	} else if (tile.type == Tile::Type::Wall_Short_Yellow) {
 		filePath = filePath + "Short.png";	
 		x = 20;
-	} else if (tile.type == Wall_Tile::Type::Corner) {
+	} else if (tile.type == Tile::Type::Wall_Corner_Yellow) {
 		filePath = filePath + "Corner.png";
 		x = 20;
 		y = 20;

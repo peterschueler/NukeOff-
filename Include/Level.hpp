@@ -5,61 +5,43 @@
 #include <vector>
 #include <iostream>
 
-struct Tile {
+struct Tile {	
+	enum class Type {
+		Default,		// white square, 20x20
+		Brick_Basic_Red,
+		Brick_Basic_Green,
+		Brick_Basic_Blue,
+		Brick_Basic_Yellow,
+		Brick_Basic_Purple,
+		Brick_Basic_White,
+		Brick_Hard,
+		Brick_LifeUp,
+		Brick_SpeedUp,
+		Brick_SpeedDown,
+		Brick_Bomb,
+		Brick_Nuke,
+		Wall_Long_Yellow,
+		Wall_Short_Yellow,
+		Wall_Medium_Yellow,
+		Wall_Corner_Yellow,
+	};
+	
+	Tile(): x(0), y(0), rotation(0), type(Tile::Type::Default) {
+	}
+	
+	Tile(int _x, int _y, int _rotation, Tile::Type _type) {
+		x = _x;
+		y = _y;
+		rotation = _rotation;
+		type = _type;
+	}
+	
+	Tile::Type getType() const {
+		return type;
+	}
 	int x,y;
-	enum class Type {
-		Default,
-		Hard,
-		LifeUp,
-		SpeedUp,
-		SpeedDown,
-		Bomb,
-		Nuke,
-	};
-	enum class Color {
-		Red,
-		Green,
-		Blue,
-		Yellow,
-		Purple,
-		White,
-	};
-	Type type;
-	Color color;
-};
-
-struct Wall_Tile {
-	int x, y;
 	int rotation;
-	enum class Type {
-		Long,
-		Medium,
-		Short,
-		Corner,
-	};
 	Type type;
-	
-	public:
-		Wall_Tile(): x(0), y(0), rotation(0), type(Wall_Tile::Type::Medium) {
-		}
-	
-		Wall_Tile(int _x, int _y, int _rotation, std::string _type) {
-			x = _x;
-			y = _y;
-			rotation = _rotation;
-			if (_type == "Long") {
-				type = Wall_Tile::Type::Long;
-			} else if (_type == "Medium") {
-				type = Wall_Tile::Type::Medium;
-			} else if (_type == "Short") {
-				type = Wall_Tile::Type::Short;
-			} else if (_type == "Corner") {
-				type = Wall_Tile::Type::Corner;
-			} else {
-				type = Wall_Tile::Type::Medium;
-				std::cout << "WARNING: No type assigned on construction. Using default Medium." << std::endl;
-			}
-		}
 };
 
 class Level {
@@ -79,7 +61,7 @@ public:
 	unsigned int getNumber() const;
 	
 	std::vector<Tile> getTiles() const;
-	std::vector<Wall_Tile> getWallTiles() const;
+	std::vector<Tile> getWallTiles() const;
 	
 private:
 	std::vector<Tile> loadFromFile(std::string);
@@ -89,7 +71,7 @@ private:
 
 	unsigned int number;
 	std::vector<Tile> tiles;
-	std::vector<Wall_Tile> walls;
+	std::vector<Tile> walls;
 };
 
 #endif
