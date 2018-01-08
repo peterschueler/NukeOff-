@@ -1,12 +1,14 @@
 #include "../Include/Entity_Wall.hpp"
+#include "../Include/TextureManager.hpp"
 
 #include <iostream>
 
 Entity_Wall::Entity_Wall() : sprite(), level(0) {
 	attachTexture();
+	txtManager = new TextureManager();
 }
 
-Entity_Wall::Entity_Wall(Tile wl, unsigned int lvl) : sprite(), tile(wl), level(lvl) {
+Entity_Wall::Entity_Wall(Tile wl, unsigned int lvl, TextureManager& mgr) : sprite(), tile(wl), level(lvl), txtManager(&mgr) {
 	attachTexture();
 	setPosition(wl.x, wl.y);
 }
@@ -50,11 +52,8 @@ void Entity_Wall::attachTexture() {
 	}
 	sprite.setOrigin(sprite.getGlobalBounds().height / 2, sprite.getGlobalBounds().width / 2);
 	sf::IntRect rect = sf::IntRect(0,0,x,y);
-	if (texture.loadFromFile(filePath)) {
-		sprite.setTexture(texture);
-		sprite.setTextureRect(rect);
-		sprite.setRotation(tile.rotation);
-	} else {
-		std::cerr << "Couldn't load " << filePath << ". Did you try to access a non-existing level?" << std::endl;
-	}
+	txtManager->load(tile.type);
+	sprite.setTexture(txtManager->get(tile.type));
+	sprite.setTextureRect(rect);
+	sprite.setRotation(tile.rotation);
 }

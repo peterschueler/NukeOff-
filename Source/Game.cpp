@@ -16,7 +16,8 @@ Game::Game(sf::RenderWindow& win) : window(win), bounds(0.f, 0.f, window.getDefa
 	paddle = new Entity_Paddle();
 	paddle->setPosition(300, 100);
 	
-	ball = new Entity_Ball();
+	auto ballTile = Tile(0,0,0,Tile::Type::Ball_Default);
+	ball = new Entity_Ball(ballTile, *txtManager);
 	ball->setPosition(280, 80);
 	
 	initializeLevels();	
@@ -124,7 +125,7 @@ void Game::setupLevel(unsigned int number, Level* level) {
 	}
 	
 	for (auto wall : level->getWallTiles()) {
-		Entity_Wall* wl = new Entity_Wall(wall, number);
+		Entity_Wall* wl = new Entity_Wall(wall, number, *txtManager);
 		walls.push_back(wl);
 	}
 }

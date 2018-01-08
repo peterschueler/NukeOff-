@@ -1,8 +1,18 @@
 #include "../Include/Entity_Ball.hpp"
+#include "../Include/TextureManager.hpp"
 
 #include <iostream>
 
-Entity_Ball::Entity_Ball() : sprite(7.5), texture() {
+Entity_Ball::Entity_Ball() : sprite(7.5) {
+	tile.x = 0;
+	tile.y = 0;
+	tile.type = Tile::Type::Ball_Default;
+	attachTexture();
+	setOrigin(borders().width / 2, borders().height / 2);
+	txtManager = new TextureManager();
+}
+
+Entity_Ball::Entity_Ball(Tile tile, TextureManager& mgr): sprite(7.5), tile(tile), txtManager(&mgr) {
 	attachTexture();
 	setOrigin(borders().width / 2, borders().height / 2);
 }
@@ -36,13 +46,9 @@ void Entity_Ball::attachTexture() {
 	std::string filePath = "Assets/Textures/Objects/Default/Ball.png";
 	int y_axis = 15;
 	int x_axis = 15;
-
+	
 	sf::IntRect rect = sf::IntRect(0,0,x_axis, y_axis);
-	if (texture.loadFromFile(filePath)) {
-		sprite.setTexture(&texture);
-		sprite.setTextureRect(rect);
-	} else {
-		std::cerr << "Couldn't load " << filePath << ". Did you misplace the the texture file?" << std::endl;
-	}
-	std::cout << "x: " << sprite.getGlobalBounds().width << " y: " << sprite.getGlobalBounds().height << std::endl;
+	txtManager->load(tile.type);
+	sprite.setTexture(&txtManager->get(tile.type));
+	sprite.setTextureRect(rect);
 }

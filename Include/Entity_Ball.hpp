@@ -2,10 +2,14 @@
 #define Entity_Ball_hpp
 
 #include "Entity.hpp"
+#include "Level.hpp"
+
+class TextureManager;
 
 class Entity_Ball : public Entity {
 public:
 	Entity_Ball();
+	Entity_Ball(Tile, TextureManager&);
 	
 	void update(sf::Time);
 	sf::FloatRect borders() const;
@@ -19,8 +23,10 @@ protected:
 	
 private:
 	sf::CircleShape sprite;
-	sf::Texture texture;
 	sf::Vector2f direction;
+	
+	Tile tile;
+	TextureManager* txtManager;
 };
 
 #endif

@@ -16,22 +16,20 @@ sf::Texture& TextureManager::get(Tile::Type _type) const {
 
 std::string TextureManager::typeToFileName(Tile::Type _type) const {
 	std::string brickPath = "Assets/Textures/Bricks/Default/Brick_";
-	std::string wallPath = "Assets/Textures/Walls/Wall_";
+	std::string wallPath = "Assets/Textures/Walls/Default/Wall_";
+	std::string ballParth = "Assets/Textures/Balls/Default/Ball_";
 	std::string defaultPath = "Assets/Textures/Defaults/white.png";
 	
 	switch(_type) {
 	case Tile::Type::Default:
-
 		return defaultPath;
 	case Tile::Type::Brick_Basic_Red:
-
 		return brickPath + "Red.png";
 	case Tile::Type::Brick_Basic_Green:
 		return brickPath + "Green.png";
 	case Tile::Type::Brick_Basic_Blue:
 		return brickPath + "Blue.png";
 	case Tile::Type::Brick_Basic_Yellow:
-
 		return brickPath + "Yellow.png";
 	case Tile::Type::Brick_Basic_Purple:
 		return brickPath + "Purple.png";
@@ -57,5 +55,7 @@ std::string TextureManager::typeToFileName(Tile::Type _type) const {
 		return wallPath + "Medium.png";
 	case Tile::Type::Wall_Corner_Yellow:
 		return wallPath + "Corner.png";
+	case Tile::Type::Ball_Default:
+		return ballParth + "Default.png";
 	}
 }

@@ -24,6 +24,7 @@ struct Tile {
 		Wall_Short_Yellow,
 		Wall_Medium_Yellow,
 		Wall_Corner_Yellow,
+		Ball_Default,
 	};
 	
 	Tile(): x(0), y(0), rotation(0), type(Tile::Type::Default) {
