@@ -43,7 +43,6 @@ void Entity_Ball::draw(sf::RenderTarget& target, sf::RenderStates states) const 
 }
 
 void Entity_Ball::attachTexture() {
-	std::string filePath = "Assets/Textures/Objects/Default/Ball.png";
 	int y_axis = 15;
 	int x_axis = 15;
 	

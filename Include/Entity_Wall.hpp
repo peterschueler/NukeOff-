@@ -8,10 +8,9 @@ class TextureManager;
 
 class Entity_Wall : public Entity {
 public:
-	Entity_Wall();
 	Entity_Wall(Tile, unsigned int, TextureManager&);
 	// x, y, rotation, level
-	Entity_Wall(int, int, int, Tile::Type, unsigned int);
+	Entity_Wall(int, int, int, Tile::Type, unsigned int, TextureManager&);
 	
 	void update(sf::Time);
 	
