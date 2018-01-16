@@ -54,6 +54,17 @@ bool Game::update(sf::Time delta) {
 	paddle->update(delta);
 	ball->update(delta);
 	checkCollisions();
+	
+	auto brick_iter = bricks.begin();
+	while (brick_iter != bricks.end()) {
+		auto br = *brick_iter;
+		if (br->getDestroyed() == true) {
+			brick_iter = bricks.erase(brick_iter);
+		} else {
+			++brick_iter;
+		}
+	}
+	
 	return true;
 }
 
@@ -146,22 +157,27 @@ void Game::checkCollisions() {
 		}
 	}
 	
+	// TODO: add checks for relative direction of ball. (normalize ball vector, compare with brick/wall rect.)
+	
 	for (auto iter = bricks.begin(); iter != bricks.end(); ++iter) {
 		Entity_Brick* br = *iter;
+		
 		if (br->borders().intersects(ball->borders())) {
-			sf::Vector2f ballDir = ball->getDirection();
-			ball->setDirection(-ball->getDirection().x, -ball->getDirection().y);
+			ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+			br->destroy();
+			return;
 		}
 	}
-	
+
 	for (auto iter = walls.begin(); iter != walls.end(); ++iter) {
 		Entity_Wall* wl = *iter;
 		if (wl->borders().intersects(ball->borders())) {
-			sf::Vector2f ballDir = ball->getDirection();
-			if (ballDir.x >= 0) {
-				ball->setDirection(-ball->getDirection().x, -ball->getDirection().y);
+			if (ball->getPosition().x > 25) {
+				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
+				return;
 			} else {
-				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);	
+				ball->setDirection(-ball->getDirection().x, -ball->getDirection().y);
+				return;
 			}
 		}
 	}
