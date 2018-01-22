@@ -152,8 +152,10 @@ void Game::checkCollisions() {
 		sf::Vector2f padDir = paddle->getDirection();
 		if (padDir.y == 0) {
 			ball->setDirection(-ball->getDirection().y, ball->getDirection().x);
+			return;
 		} else {
 			ball->setDirection(-ball->getDirection().x, padDir.y);
+			return;
 		}
 	}
 	
