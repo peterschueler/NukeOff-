@@ -13,13 +13,7 @@
 Game::Game(sf::RenderWindow& win) : window(win), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), upperBorder(40), lowerBorder(200) {
 	txtManager = new TextureManager();
 	
-	paddle = new Entity_Paddle();
-	paddle->setPosition(300, 100);
-	
-	auto ballTile = Tile(0,0,0,Tile::Type::Ball_Default);
-	ball = new Entity_Ball(ballTile, *txtManager);
-	ball->setPosition(280, 80);
-	
+	resetLevel();
 	initializeLevels();	
 	setupLevel(0, currentLevel);
 }
@@ -51,6 +45,7 @@ bool Game::update(sf::Time delta) {
 	if (gameOver) {
 		return false;
 	}
+	
 	paddle->update(delta);
 	ball->update(delta);
 	checkCollisions();
@@ -63,6 +58,14 @@ bool Game::update(sf::Time delta) {
 		} else {
 			++brick_iter;
 		}
+	}
+	
+	if (ball->getPosition().x > 330) {
+		gameOver = true;
+	}
+	
+	if (bricks.size() == 0) {
+		nextLevel();
 	}
 	
 	return true;
@@ -86,8 +89,8 @@ void Game::selectLevel(unsigned int number) {
 }
 
 void Game::nextLevel() {
-	if (currentLevel->getNumber() == levels.back()->getNumber()) {
-		selectLevel(1);
+	if (currentLevel->getNumber() == levels.back()->getNumber() || currentLevel->getNumber() == 0) {
+		selectLevel(0);
 	} else {
 		selectLevel(currentLevel->getNumber() + 1);
 	}
@@ -118,9 +121,12 @@ void Game::initializeLevels() {
 	for (unsigned int it = 0; it < levels.size(); it++) {
 		levels[it]->setNumber(it);
 	}
+	currentLevel = levels.front();
 }
 
 void Game::setupLevel(unsigned int number, Level* level) {
+	resetLevel();
+	
 	for (auto lvl : levels) {
 		if (lvl->getNumber() == number) {
 			level = lvl;
@@ -137,9 +143,29 @@ void Game::setupLevel(unsigned int number, Level* level) {
 		Entity_Wall* wl = new Entity_Wall(wall, number, *txtManager);
 		walls.push_back(wl);
 	}
+	currentLevel = level;
+}
+
+void Game::resetLevel() {
+	bricks.clear();
+	walls.clear();
+	
+	paddle = NULL;
+	delete paddle;
+	auto _pad = new Entity_Paddle();
+	paddle = std::move(_pad);
+	paddle->setPosition(300, 100);
+	
+	ball = NULL;
+	delete ball;
+	auto ballTile = Tile(0,0,0,Tile::Type::Ball_Default);
+	auto _ball = new Entity_Ball(ballTile, *txtManager);
+	ball = std::move(_ball);
+	ball->setPosition(280, 80);
 }
 
 void Game::checkCollisions() {
+	// MARK: Paddle Collisions
 	if (paddle->getPosition().y <= upperBorder) {
 		paddle->setPosition(paddle->getPosition().x, upperBorder);
 	}
@@ -157,8 +183,7 @@ void Game::checkCollisions() {
 		}
 	}
 	
-	// TODO: add checks for relative direction of ball. (normalize ball vector, compare with brick/wall rect.)
-	
+	// MARK: Brick Collisions
 	for (auto iter = bricks.begin(); iter != bricks.end(); ++iter) {
 		Entity_Brick* br = *iter;
 		
@@ -169,6 +194,7 @@ void Game::checkCollisions() {
 		}
 	}
 
+	// MARK: Wall Collisions
 	for (auto iter = walls.begin(); iter != walls.end(); ++iter) {
 		Entity_Wall* wl = *iter;
 		if (wl->borders().intersects(ball->borders())) {

@@ -31,6 +31,7 @@ private:
 	
 	void initializeLevels();
 	void setupLevel(unsigned int, Level*);
+	void resetLevel();
 	
 	void checkCollisions();
 	
