@@ -110,7 +110,6 @@ void Game::initializeLevels() {
 	}
 	for (auto lvl : lvls) {
 		auto name = "Assets/Levels/" + lvl;
-		std::cout << "Loading " << name << std::endl;
 		Level *newLevel = new Level(name);
 		newLevel->setNumber(0);
 		levels.push_back(newLevel);
@@ -125,9 +124,8 @@ void Game::setupLevel(unsigned int number, Level* level) {
 	for (auto lvl : levels) {
 		if (lvl->getNumber() == number) {
 			level = lvl;
-			std::cout << "Level " << number << " was found." << std::endl;
 		} else {
-			std::cout << "Level " << number << " not found." << std::endl;
+			std::cerr << "Level " << number << " not found." << std::endl;
 		}
 	}
 	for (auto tile : level->getTiles()) {

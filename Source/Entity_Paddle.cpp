@@ -39,7 +39,6 @@ void Entity_Paddle::setState(Entity_Paddle::Paddle_State st) {
 }
 
 void Entity_Paddle::moveUp(float vy) {
-	std::cout << "Setting direction " << vy << std::endl;
 	direction.y = vy;
 }
 
