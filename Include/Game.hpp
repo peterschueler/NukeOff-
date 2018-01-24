@@ -9,12 +9,11 @@
 #include "State.hpp"
 #include "Level.hpp"
 
-class Entity_Brick;
-class Entity_Wall;
-class Entity_Paddle;
-class Entity_Ball;
-
-class TextureManager;
+#include "../Include/Entity_Brick.hpp"
+#include "../Include/Entity_Wall.hpp"
+#include "../Include/Entity_Paddle.hpp"
+#include "../Include/Entity_Ball.hpp"
+#include "../Include/TextureManager.hpp"
 
 class Game : public sf::NonCopyable, public State {
 public:
@@ -30,7 +29,7 @@ private:
 	void previousLevel();
 	
 	void initializeLevels();
-	void setupLevel(unsigned int, Level*);
+	void setupLevel(unsigned int, std::shared_ptr<Level>);
 	void resetLevel();
 	
 	void checkCollisions();
@@ -38,18 +37,18 @@ private:
 	sf::RenderWindow& window;
 	sf::FloatRect bounds;
 	
-	Level* currentLevel;
-	std::vector<Level*> levels;
-	std::vector<Entity_Brick*> bricks;
-	std::vector<Entity_Wall*> walls;
-	Entity_Paddle* paddle;
-	Entity_Ball* ball;
+	std::shared_ptr<Level> currentLevel;
+	std::vector<std::shared_ptr<Level>> levels;
+	std::vector<std::shared_ptr<Entity_Brick>> bricks;
+	std::vector<std::shared_ptr<Entity_Wall>> walls;
+	std::unique_ptr<Entity_Paddle> paddle;
+	std::unique_ptr<Entity_Ball> ball;
 	bool gameOver;
 	
 	float upperBorder;
 	float lowerBorder;
 	
-	TextureManager* txtManager;
+	std::shared_ptr<TextureManager> txtManager;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #include "../Include/TextureManager.hpp"
 
 void TextureManager::load(Tile::Type _type) {
-	sf::Texture *texture = new sf::Texture();
+	auto texture = std::make_shared<sf::Texture>();
 	std::string path = typeToFileName(_type);
 	if (!texture->loadFromFile(path)) {
 		std::cerr << "ERROR: Couldn't load texture!"  << std::endl;
@@ -18,6 +18,7 @@ std::string TextureManager::typeToFileName(Tile::Type _type) const {
 	std::string brickPath = "Assets/Textures/Bricks/Default/Brick_";
 	std::string wallPath = "Assets/Textures/Walls/Default/Wall_";
 	std::string ballParth = "Assets/Textures/Balls/Default/Ball_";
+	std::string paddlePath = "Assets/Textures/Objects/Default/Paddle_";
 	std::string defaultPath = "Assets/Textures/Defaults/white.png";
 	
 	switch(_type) {
@@ -57,5 +58,9 @@ std::string TextureManager::typeToFileName(Tile::Type _type) const {
 		return wallPath + "Corner.png";
 	case Tile::Type::Ball_Default:
 		return ballParth + "Default.png";
+	case Tile::Type::Paddle_Short:
+		return paddlePath + "Short.png";
+	case Tile::Type::Paddle_Long:
+		return paddlePath + "Long.png";
 	}
 }

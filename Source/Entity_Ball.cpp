@@ -9,10 +9,10 @@ Entity_Ball::Entity_Ball() : sprite(7.5) {
 	tile.type = Tile::Type::Ball_Default;
 	attachTexture();
 	setOrigin(borders().width / 2, borders().height / 2);
-	txtManager = new TextureManager();
+	txtManager = std::make_shared<TextureManager>();
 }
 
-Entity_Ball::Entity_Ball(Tile tile, TextureManager& mgr): sprite(7.5), tile(tile), txtManager(&mgr) {
+Entity_Ball::Entity_Ball(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(7.5), tile(tile), txtManager(mgr) {
 	attachTexture();
 	setOrigin(borders().width / 2, borders().height / 2);
 }

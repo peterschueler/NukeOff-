@@ -4,14 +4,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "../Include/Entity_Brick.hpp"
-#include "../Include/Entity_Wall.hpp"
-#include "../Include/Entity_Paddle.hpp"
-#include "../Include/Entity_Ball.hpp"
-#include "../Include/TextureManager.hpp"
-
 Game::Game(sf::RenderWindow& win) : window(win), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), upperBorder(40), lowerBorder(200) {
-	txtManager = new TextureManager();
+	txtManager = std::make_shared<TextureManager>(TextureManager());
 	
 	resetLevel();
 	initializeLevels();	
@@ -28,9 +22,7 @@ bool Game::processInput(sf::Event& event) {
 			paddle->moveUp(60);
 		} else if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
 			paddle->moveUp(-60);
-		} else if (event.key.code == sf::Keyboard::L) {
-			paddle->setState(Entity_Paddle::Paddle_State::Long);
-		} else if (event.key.code == sf::Keyboard::Space) {
+		}  else if (event.key.code == sf::Keyboard::Space) {
 			ball->setDirection(20, 30);
 		}
 	} else if (event.type == sf::Event::KeyReleased) {
@@ -113,7 +105,7 @@ void Game::initializeLevels() {
 	}
 	for (auto lvl : lvls) {
 		auto name = "Assets/Levels/" + lvl;
-		Level *newLevel = new Level(name);
+		auto newLevel = std::make_shared<Level>(name);
 		newLevel->setNumber(0);
 		levels.push_back(newLevel);
 	}
@@ -124,7 +116,7 @@ void Game::initializeLevels() {
 	currentLevel = levels.front();
 }
 
-void Game::setupLevel(unsigned int number, Level* level) {
+void Game::setupLevel(unsigned int number, std::shared_ptr<Level> level) {
 	resetLevel();
 	
 	for (auto lvl : levels) {
@@ -135,12 +127,12 @@ void Game::setupLevel(unsigned int number, Level* level) {
 		}
 	}
 	for (auto tile : level->getTiles()) {
-		Entity_Brick* br = new Entity_Brick(tile, *txtManager);
+		auto br = std::make_shared<Entity_Brick>(Entity_Brick(tile, txtManager));
 		bricks.push_back(br);
 	}
 	
 	for (auto wall : level->getWallTiles()) {
-		Entity_Wall* wl = new Entity_Wall(wall, number, *txtManager);
+		auto wl = std::make_shared<Entity_Wall>(Entity_Wall(wall, number, txtManager));
 		walls.push_back(wl);
 	}
 	currentLevel = level;
@@ -149,18 +141,13 @@ void Game::setupLevel(unsigned int number, Level* level) {
 void Game::resetLevel() {
 	bricks.clear();
 	walls.clear();
-	
-	paddle = NULL;
-	delete paddle;
-	auto _pad = new Entity_Paddle();
-	paddle = std::move(_pad);
+
+	auto paddleTile = Tile(0,0,0,Tile::Type::Paddle_Short);
+	paddle = std::make_unique<Entity_Paddle>(Entity_Paddle(paddleTile, txtManager));
 	paddle->setPosition(300, 100);
-	
-	ball = NULL;
-	delete ball;
+
 	auto ballTile = Tile(0,0,0,Tile::Type::Ball_Default);
-	auto _ball = new Entity_Ball(ballTile, *txtManager);
-	ball = std::move(_ball);
+	ball = std::make_unique<Entity_Ball>(Entity_Ball(ballTile, txtManager));
 	ball->setPosition(280, 80);
 }
 
@@ -185,7 +172,7 @@ void Game::checkCollisions() {
 	
 	// MARK: Brick Collisions
 	for (auto iter = bricks.begin(); iter != bricks.end(); ++iter) {
-		Entity_Brick* br = *iter;
+		auto br = *iter;
 		
 		if (br->borders().intersects(ball->borders())) {
 			ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
@@ -196,13 +183,13 @@ void Game::checkCollisions() {
 
 	// MARK: Wall Collisions
 	for (auto iter = walls.begin(); iter != walls.end(); ++iter) {
-		Entity_Wall* wl = *iter;
+		auto wl = *iter;
 		if (wl->borders().intersects(ball->borders())) {
-			if (ball->getPosition().x > 25) {
+			if (ball->getPosition().x > 35) {
 				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
 				return;
 			} else {
-				ball->setDirection(-ball->getDirection().x, -ball->getDirection().y);
+				ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
 				return;
 			}
 		}

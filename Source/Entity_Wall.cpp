@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Entity_Wall::Entity_Wall(Tile wl, unsigned int lvl, TextureManager& mgr) : sprite(), tile(wl), level(lvl), txtManager(&mgr) {
+Entity_Wall::Entity_Wall(Tile wl, unsigned int lvl, const std::shared_ptr<TextureManager>& mgr) : sprite(), tile(wl), level(lvl), txtManager(mgr) {
 	setPosition(wl.x, wl.y);
 	attachTexture();
 }

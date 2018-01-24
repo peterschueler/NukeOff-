@@ -8,7 +8,7 @@ class TextureManager;
 
 class Entity_Wall : public Entity {
 public:
-	Entity_Wall(Tile, unsigned int, TextureManager&);
+	Entity_Wall(Tile, unsigned int, const std::shared_ptr<TextureManager>&);
 	// x, y, rotation, level
 	Entity_Wall(int, int, int, Tile::Type, unsigned int, TextureManager&);
 	
@@ -28,7 +28,7 @@ private:
 	
 	unsigned int level;
 	
-	TextureManager* txtManager;
+	std::shared_ptr<TextureManager> txtManager;
 };
 
 #endif

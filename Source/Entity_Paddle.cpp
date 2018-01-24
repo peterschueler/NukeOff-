@@ -2,7 +2,12 @@
 
 #include <iostream>
 
-Entity_Paddle::Entity_Paddle() : sprite(), texture(), state(Entity_Paddle::Paddle_State::Short) {
+Entity_Paddle::Entity_Paddle() : sprite(), texture(), tile() {
+	tile.type = Tile::Type::Paddle_Short;
+	attachTexture();
+}
+
+Entity_Paddle::Entity_Paddle(Tile tl, const std::shared_ptr<TextureManager>& mgr): sprite(), texture(), tile(tl), txtManager(mgr) {
 	attachTexture();
 }
 
@@ -16,7 +21,7 @@ sf::FloatRect Entity_Paddle::borders() const {
 }
 
 void Entity_Paddle::setAdjustedPosition(float x, float y) {
-	if (state == Entity_Paddle::Paddle_State::Long) {
+	if (tile.type == Tile::Type::Paddle_Long) {
 		float y_axis = y - 20;
 		setPosition(x, y_axis);
 		return;
@@ -25,17 +30,12 @@ void Entity_Paddle::setAdjustedPosition(float x, float y) {
 }
 
 sf::Vector2f Entity_Paddle::getAdjustedPosition() const {
-	if (state == Entity_Paddle::Paddle_State::Long) {
+	if (tile.type == Tile::Type::Paddle_Long) {
 		float y_axis = getPosition().y + 20;
 		sf::Vector2f adjustedPosition = sf::Vector2f(getPosition().x, y_axis);
 		return adjustedPosition;
 	}
 	return getPosition();
-}
-
-void Entity_Paddle::setState(Entity_Paddle::Paddle_State st) {
-	state = st;
-	attachTexture();
 }
 
 void Entity_Paddle::moveUp(float vy) {
@@ -53,22 +53,15 @@ void Entity_Paddle::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 }
 
 void Entity_Paddle::attachTexture() {
-	std::string filePath = "Assets/Textures/Objects/Default/Paddle";
 	int y_axis = 0;
-	if (state == Entity_Paddle::Paddle_State::Short) {
-		filePath = filePath + "_Small.png";
+	if (tile.type == Tile::Type::Paddle_Short) {
 		y_axis = 20;
-	} else if (state == Entity_Paddle::Paddle_State::Long){
-		filePath = filePath + "_Large.png";
-		std::cout << "It's long now." << std::endl;
+	} else if (tile.type == Tile::Type::Paddle_Long) {
 		y_axis = 40;
 	}
 	
 	sf::IntRect rect = sf::IntRect(0,0,10,y_axis);
-	if (texture.loadFromFile(filePath)) {
-		sprite.setTexture(texture);
-		sprite.setTextureRect(rect);
-	} else {
-		std::cerr << "Couldn't load " << filePath << ". Did you misplace the the texture file?" << std::endl;
-	}
+	txtManager->load(tile.type);
+	sprite.setTexture(txtManager->get(tile.type));
+	sprite.setTextureRect(rect);
 }

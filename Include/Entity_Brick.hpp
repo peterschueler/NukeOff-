@@ -13,7 +13,7 @@ std::pair<int, int> convertTileSpaceToRealSpace(Tile);
 class Entity_Brick : public Entity {
 public:
 	Entity_Brick();
-	Entity_Brick(Tile, TextureManager&);
+	Entity_Brick(Tile, const std::shared_ptr<TextureManager>&);
 	// used for chrome
 	Entity_Brick(std::string, TextureManager&);
 	
@@ -41,7 +41,7 @@ private:
 	bool isDestroyed;
 	bool isDestructable;
 	
-	TextureManager* txtManager;
+	std::shared_ptr<TextureManager> txtManager;
 };
 
 #endif

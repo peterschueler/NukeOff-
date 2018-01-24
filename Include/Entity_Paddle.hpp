@@ -3,23 +3,18 @@
 
 #include "Entity.hpp"
 
+#include "TextureManager.hpp"
+
 class Entity_Paddle : public Entity {
 public:
-	enum class Paddle_State {
-		Long,
-		Short,
-		Thick,
-	};
-	
-public:
 	Entity_Paddle();
+	Entity_Paddle(Tile, const std::shared_ptr<TextureManager>&);
 	
 	void update(sf::Time);	
 	
 	sf::FloatRect borders() const;
 	void setAdjustedPosition(float, float);
 	sf::Vector2f getAdjustedPosition() const;
-	void setState(Entity_Paddle::Paddle_State);
 	
 	void moveUp(float);
 	sf::Vector2f getDirection() const {
@@ -36,7 +31,9 @@ private:
 	sf::Texture texture;
 	sf::Vector2f direction;
 	
-	Paddle_State state;
+	Tile tile;
+	
+	std::shared_ptr<TextureManager> txtManager;
 };
 
 #endif

@@ -9,7 +9,7 @@ class TextureManager;
 class Entity_Ball : public Entity {
 public:
 	Entity_Ball();
-	Entity_Ball(Tile, TextureManager&);
+	Entity_Ball(Tile, const std::shared_ptr<TextureManager>&);
 	
 	void update(sf::Time);
 	sf::FloatRect borders() const;
@@ -27,7 +27,7 @@ private:
 	sf::Vector2f direction;
 	
 	Tile tile;
-	TextureManager* txtManager;
+	std::shared_ptr<TextureManager> txtManager;
 };
 
 #endif

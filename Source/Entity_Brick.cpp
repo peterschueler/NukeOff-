@@ -54,10 +54,10 @@ Entity_Brick::Entity_Brick(): sprite(), isDestroyed(false) {
 	tile.type = Tile::Type::Default;
 	setDestructable(true);
 	attachTexture();
-	txtManager = new TextureManager();
+	txtManager = std::make_shared<TextureManager>();
 }
 
-Entity_Brick::Entity_Brick(Tile tile, TextureManager& mgr): sprite(), isDestroyed(false), tile(tile), txtManager(&mgr) {
+Entity_Brick::Entity_Brick(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(), isDestroyed(false), tile(tile), txtManager(mgr) {
 	if (tile.type == Tile::Type::Brick_Hard) {
 		setDestructable(false);
 	} else {

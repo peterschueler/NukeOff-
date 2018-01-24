@@ -20,7 +20,7 @@ private:
 	std::string typeToFileName(Tile::Type) const;
 	
 private:
-	std::map<Tile::Type, sf::Texture*> textureMap;
+	std::map<Tile::Type, std::shared_ptr<sf::Texture>> textureMap;
 };
 
 #endif
