@@ -15,6 +15,7 @@ public:
 	void update(sf::Time);
 	
 	sf::FloatRect borders() const;
+	sf::Vector2f getCenter() const;
 	
 protected:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;

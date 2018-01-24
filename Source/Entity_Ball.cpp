@@ -36,6 +36,12 @@ sf::FloatRect Entity_Ball::borders() const {
 	return bounds;
 }
 
+sf::Vector2f Entity_Ball::getCenter() const {
+	auto xCenter = borders().width / 2;
+	auto yCenter = borders().height / 2;
+	return sf::Vector2f(xCenter, yCenter);
+}
+
 void Entity_Ball::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	

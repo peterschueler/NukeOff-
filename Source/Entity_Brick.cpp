@@ -75,6 +75,12 @@ sf::FloatRect Entity_Brick::borders() const {
 	sf::FloatRect bounds = getTransform().transformRect(sprite.getGlobalBounds());
 	return bounds;
 }
+
+sf::Vector2f Entity_Brick::getCenter() const {
+	auto xCenter = borders().width / 2;
+	auto yCenter = borders().height / 2;
+	return sf::Vector2f(xCenter, yCenter);
+}
 	
 void Entity_Brick::destroy() {
 	isDestroyed = true;

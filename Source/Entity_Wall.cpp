@@ -21,6 +21,12 @@ sf::FloatRect Entity_Wall::borders() const {
 	return bounds;
 }
 
+sf::Vector2f Entity_Wall::getCenter() const {
+	auto xCenter = borders().width / 2;
+	auto yCenter = borders().height / 2;
+	return sf::Vector2f(xCenter, yCenter);
+}
+
 void Entity_Wall::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	
