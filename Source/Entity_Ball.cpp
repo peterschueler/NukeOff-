@@ -8,13 +8,13 @@ Entity_Ball::Entity_Ball() : sprite(7.5) {
 	tile.y = 0;
 	tile.type = Tile::Type::Ball_Default;
 	attachTexture();
-	setOrigin(borders().width / 2, borders().height / 2);
+	sprite.setOrigin(sprite.getRadius(), sprite.getRadius());
 	txtManager = std::make_shared<TextureManager>();
 }
 
 Entity_Ball::Entity_Ball(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(7.5), tile(tile), txtManager(mgr) {
 	attachTexture();
-	setOrigin(borders().width / 2, borders().height / 2);
+	sprite.setOrigin(sprite.getRadius(), sprite.getRadius());
 }
 
 void Entity_Ball::update(sf::Time delta) {

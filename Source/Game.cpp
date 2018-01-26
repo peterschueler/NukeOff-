@@ -174,8 +174,25 @@ void Game::checkCollisions() {
 	for (auto iter = bricks.begin(); iter != bricks.end(); ++iter) {
 		auto br = *iter;
 		
+		auto left = br->borders().left + 1;
+		auto right = br->borders().left + br->borders().width - 1;
+		
+		auto top = br->borders().top + 1;
+		auto bottom = br->borders().top + br->borders().height - 1;
+		
 		if (br->borders().intersects(ball->borders())) {
-			ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+			if (ball->getPosition().y < top && ball->getPosition().x > left && ball->getPosition().x < right) {
+				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
+			} else if (ball->getPosition().y > bottom && ball->getPosition().x > left && ball->getPosition().x < left) {
+				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
+			} else if (ball->getPosition().x < left && ball->getPosition().y > top && ball->getPosition().y < bottom) {
+				ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+			} else if (ball->getPosition().x > right && ball->getPosition().y > top && ball->getPosition().y < bottom) {
+				ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+			} else {
+				return;
+			}
+			
 			br->destroy();
 			return;
 		}
