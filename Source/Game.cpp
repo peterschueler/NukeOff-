@@ -174,11 +174,14 @@ void Game::checkCollisions() {
 	for (auto iter = bricks.begin(); iter != bricks.end(); ++iter) {
 		auto br = *iter;
 		
+		auto adjustedWidth = br->borders().width - 1;
+		auto adjustedHeight = br->borders().height - 1;
+		
 		auto left = br->borders().left + 1;
-		auto right = br->borders().left + br->borders().width - 1;
+		auto right = br->borders().left + adjustedWidth;
 		
 		auto top = br->borders().top + 1;
-		auto bottom = br->borders().top + br->borders().height - 1;
+		auto bottom = br->borders().top + adjustedHeight;
 		
 		if (br->borders().intersects(ball->borders())) {
 			if (ball->getPosition().y < top && ball->getPosition().x > left && ball->getPosition().x < right) {
