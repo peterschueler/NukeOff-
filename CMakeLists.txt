@@ -18,7 +18,7 @@ CONFIGURE_FILE(
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
 
 SET(EXECUTABLE_NAME "NukeOut")
-ADD_EXECUTABLE(${EXECUTABLE_NAME} Source/Main.cpp Source/Application.cpp Source/Game.cpp Source/Menu.cpp Source/Level.cpp Source/Entity_Brick.cpp Source/Entity_Wall.cpp Source/Entity_Paddle.cpp Source/Entity_Ball.cpp Source/TextureManager.cpp Source/MathHelper.cpp)
+ADD_EXECUTABLE(${EXECUTABLE_NAME} Source/Main.cpp Source/Application.cpp Source/Game.cpp Source/Menu.cpp Source/Level.cpp Source/Entity_Brick.cpp Source/Entity_Wall.cpp Source/Entity_Paddle.cpp Source/Entity_Ball.cpp Source/Entity_Background.cpp Source/TextureManager.cpp Source/MathHelper.cpp)
 
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake_Modules" ${CMAKE_MODULE_PATH})
 

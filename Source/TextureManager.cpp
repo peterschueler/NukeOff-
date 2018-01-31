@@ -20,6 +20,7 @@ std::string TextureManager::typeToFileName(Tile::Type _type) const {
 	std::string ballParth = "Assets/Textures/Balls/Default/Ball_";
 	std::string paddlePath = "Assets/Textures/Objects/Default/Paddle_";
 	std::string defaultPath = "Assets/Textures/Defaults/white.png";
+	std::string backgroundPath = "Assets/Textures/Backgrounds/Default/Background_";
 	
 	switch(_type) {
 	case Tile::Type::Default:
@@ -62,5 +63,11 @@ std::string TextureManager::typeToFileName(Tile::Type _type) const {
 		return paddlePath + "Short.png";
 	case Tile::Type::Paddle_Long:
 		return paddlePath + "Long.png";
+	case Tile::Type::Background_01:
+		return backgroundPath + "01.png";
+	case Tile::Type::Background_02:
+		return backgroundPath + "02.png";
+	case Tile::Type::Background_03:
+		return backgroundPath + "03.png";
 	}
 }

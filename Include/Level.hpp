@@ -27,6 +27,9 @@ struct Tile {
 		Ball_Default,
 		Paddle_Short,
 		Paddle_Long,
+		Background_01,
+		Background_02,
+		Background_03,
 	};
 	
 	Tile(): x(0), y(0), rotation(0), type(Tile::Type::Default) {

@@ -13,6 +13,7 @@
 #include "../Include/Entity_Wall.hpp"
 #include "../Include/Entity_Paddle.hpp"
 #include "../Include/Entity_Ball.hpp"
+#include "../Include/Entity_Background.hpp"
 #include "../Include/TextureManager.hpp"
 
 class Game : public sf::NonCopyable, public State {
@@ -43,6 +44,7 @@ private:
 	std::vector<std::shared_ptr<Entity_Wall>> walls;
 	std::unique_ptr<Entity_Paddle> paddle;
 	std::unique_ptr<Entity_Ball> ball;
+	std::unique_ptr<Entity_Background> background;
 	bool gameOver;
 	
 	float upperBorder;
