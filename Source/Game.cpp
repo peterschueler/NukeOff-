@@ -147,6 +147,7 @@ void Game::resetLevel(unsigned int number) {
 	bricks.clear();
 	walls.clear();
 	
+	// TODO: Make This Scalable.
 	if (number == 1) {
 		auto bckTile = Tile(0,0,0,Tile::Type::Background_01);
 		currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
