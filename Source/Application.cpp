@@ -4,7 +4,7 @@
 
 const sf::Time Application::secondsFramesRatio = sf::seconds(1.f/60.f);
 
-Application::Application() : window(sf::VideoMode(1280,960), "NukeOut!"), view(sf::FloatRect(0,0,320,240)), menuState(window), gameState(window, view) {
+Application::Application() : window(sf::VideoMode(1280,960), "NukeOut!", sf::Style::Titlebar|sf::Style::Close), view(sf::FloatRect(0,0,320,240)), menuState(window), gameState(window, view) {
 	currentState = &menuState;
 }
 

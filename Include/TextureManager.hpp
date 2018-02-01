@@ -6,7 +6,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Level.hpp"
+#include "Tile.hpp"
 
 class TextureManager {
 public:

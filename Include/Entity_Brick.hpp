@@ -2,7 +2,7 @@
 #define ENTITY_BRICK_HPP
 
 #include "Entity.hpp"
-#include "Level.hpp"
+#include "Tile.hpp"
 
 #include <map>
 

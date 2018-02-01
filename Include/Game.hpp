@@ -7,6 +7,7 @@
 #include <SFML/Audio.hpp>
 
 #include "State.hpp"
+#include "Tile.hpp"
 #include "Level.hpp"
 
 #include "../Include/Entity_Brick.hpp"

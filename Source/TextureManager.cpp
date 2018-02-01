@@ -1,5 +1,7 @@
 #include "../Include/TextureManager.hpp"
 
+#include <iostream>
+
 void TextureManager::load(Tile::Type _type) {
 	auto texture = std::make_shared<sf::Texture>();
 	std::string path = typeToFileName(_type);

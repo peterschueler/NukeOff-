@@ -2,7 +2,7 @@
 #define Entity_Ball_hpp
 
 #include "Entity.hpp"
-#include "Level.hpp"
+#include "Tile.hpp"
 
 class TextureManager;
 
