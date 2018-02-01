@@ -8,6 +8,9 @@ void TextureManager::load(Tile::Type _type) {
 	if (!texture->loadFromFile(path)) {
 		std::cerr << "ERROR: Couldn't load texture!"  << std::endl;
 	}
+	if (_type == Tile::Type::Background_01 || _type == Tile::Type::Background_02 || _type == Tile::Type::Background_03) {
+		texture->setRepeated(1);
+	}
 	textureMap.insert(std::make_pair(_type, std::move(texture)));
 }
 

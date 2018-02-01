@@ -25,7 +25,8 @@ bool Game::processInput(sf::Event& event) {
 		} else if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up) {
 			paddle->moveUp(-60);
 		}  else if (event.key.code == sf::Keyboard::Space) {
-			ball->setDirection(20, 30);
+			ball->setDirection(30, 30);
+			currentBackground->setDirection(30,30);
 		}
 	} else if (event.type == sf::Event::KeyReleased) {
 		if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Up) {
@@ -42,6 +43,7 @@ bool Game::update(sf::Time delta) {
 	
 	paddle->update(delta);
 	ball->update(delta);
+	currentBackground->update(delta);
 	checkCollisions();
 	
 	auto brick_iter = bricks.begin();
@@ -147,6 +149,7 @@ void Game::resetLevel() {
 	
 	auto bckTile = Tile(0,0,0,Tile::Type::Background_01);
 	currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
+	currentBackground->setPosition(-400,-400);
 
 	auto paddleTile = Tile(0,0,0,Tile::Type::Paddle_Short);
 	paddle = std::make_unique<Entity_Paddle>(Entity_Paddle(paddleTile, txtManager));
@@ -168,10 +171,12 @@ void Game::checkCollisions() {
 	if (paddle->borders().intersects(ball->borders())) {
 		sf::Vector2f padDir = paddle->getDirection();
 		if (padDir.y == 0) {
-			ball->setDirection(-ball->getDirection().y, ball->getDirection().x);
+			ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+			currentBackground->setDirection(-currentBackground->getDirection().x, currentBackground->getDirection().y);
 			return;
 		} else {
 			ball->setDirection(-ball->getDirection().x, padDir.y);
+			currentBackground->setDirection(-currentBackground->getDirection().x, padDir.y);
 			return;
 		}
 	}
@@ -192,12 +197,16 @@ void Game::checkCollisions() {
 		if (br->borders().intersects(ball->borders())) {
 			if (ball->getPosition().y < top && ball->getPosition().x > left && ball->getPosition().x < right) {
 				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
+				currentBackground->setDirection(currentBackground->getDirection().x, -currentBackground->getDirection().y);
 			} else if (ball->getPosition().y > bottom && ball->getPosition().x > left && ball->getPosition().x < left) {
 				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
+				currentBackground->setDirection(currentBackground->getDirection().x, -currentBackground->getDirection().y);
 			} else if (ball->getPosition().x < left && ball->getPosition().y > top && ball->getPosition().y < bottom) {
 				ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+				currentBackground->setDirection(-currentBackground->getDirection().x, currentBackground->getDirection().y);
 			} else if (ball->getPosition().x > right && ball->getPosition().y > top && ball->getPosition().y < bottom) {
 				ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+				currentBackground->setDirection(-currentBackground->getDirection().x, currentBackground->getDirection().y);
 			} else {
 				return;
 			}
@@ -213,9 +222,11 @@ void Game::checkCollisions() {
 		if (wl->borders().intersects(ball->borders())) {
 			if (ball->getPosition().x > 35) {
 				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
+				currentBackground->setDirection(currentBackground->getDirection().x, -currentBackground->getDirection().y);
 				return;
 			} else {
 				ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+				currentBackground->setDirection(-currentBackground->getDirection().x, currentBackground->getDirection().y);
 				return;
 			}
 		}

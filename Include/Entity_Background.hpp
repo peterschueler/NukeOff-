@@ -14,6 +14,9 @@ public:
 	void update(sf::Time);
 	sf::FloatRect borders() const;
 	
+	void setDirection(float, float);
+	sf::Vector2f getDirection() const;
+	
 protected:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
 	void attachTexture();
@@ -21,6 +24,8 @@ protected:
 private:
 	sf::Sprite sprite;
 	Tile tile;
+	
+	sf::Vector2f direction;
 	
 	std::shared_ptr<TextureManager> txtManager;
 };
