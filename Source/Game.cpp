@@ -4,8 +4,10 @@
 #include <fstream>
 #include <iostream>
 
-Game::Game(sf::RenderWindow& win) : window(win), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), upperBorder(40), lowerBorder(200) {
+Game::Game(sf::RenderWindow& win, sf::View& vw) : window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), upperBorder(40), lowerBorder(200) {
 	txtManager = std::make_shared<TextureManager>(TextureManager());
+	
+	window.setView(view);
 	
 	resetLevel();
 	initializeLevels();	
@@ -65,7 +67,7 @@ bool Game::update(sf::Time delta) {
 
 void Game::render() {
 	window.clear(sf::Color::Black);
-	window.draw(*background);
+	window.draw(*currentBackground);
 	window.draw(*paddle);
 	window.draw(*ball);
 	for (auto brick : bricks) {
@@ -144,7 +146,7 @@ void Game::resetLevel() {
 	walls.clear();
 	
 	auto bckTile = Tile(0,0,0,Tile::Type::Background_01);
-	background = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
+	currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
 
 	auto paddleTile = Tile(0,0,0,Tile::Type::Paddle_Short);
 	paddle = std::make_unique<Entity_Paddle>(Entity_Paddle(paddleTile, txtManager));

@@ -18,7 +18,7 @@
 
 class Game : public sf::NonCopyable, public State {
 public:
-	explicit Game(sf::RenderWindow&);
+	explicit Game(sf::RenderWindow&, sf::View&);
 	
 	bool processInput(sf::Event&);
 	bool update(sf::Time);
@@ -36,6 +36,7 @@ private:
 	void checkCollisions();
 	
 	sf::RenderWindow& window;
+	sf::View& view;
 	sf::FloatRect bounds;
 	
 	std::shared_ptr<Level> currentLevel;
@@ -44,7 +45,7 @@ private:
 	std::vector<std::shared_ptr<Entity_Wall>> walls;
 	std::unique_ptr<Entity_Paddle> paddle;
 	std::unique_ptr<Entity_Ball> ball;
-	std::unique_ptr<Entity_Background> background;
+	std::unique_ptr<Entity_Background> currentBackground;
 	bool gameOver;
 	
 	float upperBorder;

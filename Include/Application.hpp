@@ -22,6 +22,7 @@ private:
 	
 private:
 	sf::RenderWindow window;
+	sf::View view;
 	static const sf::Time secondsFramesRatio;
 	
 	State* currentState;
