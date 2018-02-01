@@ -9,7 +9,7 @@ Game::Game(sf::RenderWindow& win, sf::View& vw) : window(win), view(vw), bounds(
 	
 	window.setView(view);
 	
-	resetLevel();
+	resetLevel(1);
 	initializeLevels();	
 	setupLevel(0, currentLevel);
 }
@@ -26,7 +26,7 @@ bool Game::processInput(sf::Event& event) {
 			paddle->moveUp(-60);
 		}  else if (event.key.code == sf::Keyboard::Space) {
 			ball->setDirection(30, 30);
-			currentBackground->setDirection(30,30);
+			currentBackground->setDirection(100,100);
 		}
 	} else if (event.type == sf::Event::KeyReleased) {
 		if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Up) {
@@ -122,7 +122,7 @@ void Game::initializeLevels() {
 }
 
 void Game::setupLevel(unsigned int number, std::shared_ptr<Level> level) {
-	resetLevel();
+	resetLevel(number);
 	
 	for (auto lvl : levels) {
 		if (lvl->getNumber() == number) {
@@ -143,13 +143,33 @@ void Game::setupLevel(unsigned int number, std::shared_ptr<Level> level) {
 	currentLevel = level;
 }
 
-void Game::resetLevel() {
+void Game::resetLevel(unsigned int number) {
 	bricks.clear();
 	walls.clear();
 	
-	auto bckTile = Tile(0,0,0,Tile::Type::Background_01);
-	currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
-	currentBackground->setPosition(-400,-400);
+	if (number == 1) {
+		auto bckTile = Tile(0,0,0,Tile::Type::Background_01);
+		currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
+		currentBackground->setPosition(-400,-400);
+	} else if (number == 2) {
+		auto bckTile = Tile(0,0,0,Tile::Type::Background_02);
+		currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
+		currentBackground->setPosition(-400,-400);
+	} else if (number == 3) {
+		auto bckTile = Tile(0,0,0,Tile::Type::Background_03);
+		currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
+		currentBackground->setPosition(-400,-400);
+	} else if (number == 4) {
+		auto bckTile = Tile(0,0,0,Tile::Type::Background_04);
+		currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
+		currentBackground->setPosition(-400,-400);
+	} else if (number == 5) {
+		auto bckTile = Tile(0,0,0,Tile::Type::Background_05);
+		currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile,txtManager));
+		currentBackground->setPosition(-400,-400);
+	} else {
+		std::cerr << "ERROR: Couldn't load background for level " << number << std::endl;
+	}
 
 	auto paddleTile = Tile(0,0,0,Tile::Type::Paddle_Short);
 	paddle = std::make_unique<Entity_Paddle>(Entity_Paddle(paddleTile, txtManager));

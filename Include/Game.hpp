@@ -32,7 +32,7 @@ private:
 	
 	void initializeLevels();
 	void setupLevel(unsigned int, std::shared_ptr<Level>);
-	void resetLevel();
+	void resetLevel(unsigned int);
 	
 	void checkCollisions();
 	
