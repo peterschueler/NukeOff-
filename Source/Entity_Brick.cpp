@@ -48,27 +48,39 @@ std::pair<int, int> convertTileSpaceToRealSpace(Tile tile) {
 	return std::make_pair(-100, -100);
 }
 
-Entity_Brick::Entity_Brick(): sprite(), isDestroyed(false) {
+Entity_Brick::Entity_Brick(): sprite(), isDestroyed(false), destructTimer(0) {
 	tile.x = 0;
 	tile.y = 0;
 	tile.type = Tile::Type::Default;
 	setDestructable(true);
 	attachTexture();
+	sprite.setOrigin(getCenter().x / 2, getCenter().y / 2);
 	txtManager = std::make_shared<TextureManager>();
 }
 
-Entity_Brick::Entity_Brick(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(), isDestroyed(false), tile(tile), txtManager(mgr) {
+Entity_Brick::Entity_Brick(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(), isDestroyed(false), destructTimer(0), tile(tile), txtManager(mgr) {
 	if (tile.type == Tile::Type::Brick_Hard) {
 		setDestructable(false);
 	} else {
 		setDestructable(true);
 	}
 	attachTexture();
+	sprite.setOrigin(getCenter().x / 2, getCenter().y / 2);
 	std::pair<int, int> coords = convertTileSpaceToRealSpace(tile);
 	setPosition(coords.first, coords.second);
 }
 
-void Entity_Brick::update(sf::Time) {
+void Entity_Brick::update(sf::Time delta) {
+	if (destructTimer >= 1.2) {
+		isDestroyed = true;
+	}
+	if (destructTimer >= 1) {
+		destructTimer += delta.asSeconds();
+		attachTexture();
+		std::cout << "LOG: delta " << delta.asSeconds() << std::endl;
+		sprite.setColor(sf::Color(255,255,255,255/delta.asSeconds()));
+		sprite.setScale(destructTimer, destructTimer);
+	}
 }
 	
 sf::FloatRect Entity_Brick::borders() const {
@@ -83,7 +95,9 @@ sf::Vector2f Entity_Brick::getCenter() const {
 }
 	
 void Entity_Brick::destroy() {
-	isDestroyed = true;
+	tile.type = Tile::Type::Brick_Destroyed;
+	attachTexture();
+	destructTimer = 1;
 }
 
 bool Entity_Brick::getDestroyed() const {

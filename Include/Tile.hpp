@@ -16,6 +16,7 @@ struct Tile {
 		Brick_SpeedDown,
 		Brick_Bomb,
 		Brick_Nuke,
+		Brick_Destroyed,
 		Wall_Long_Yellow,
 		Wall_Short_Yellow,
 		Wall_Medium_Yellow,

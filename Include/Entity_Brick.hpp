@@ -41,6 +41,8 @@ private:
 	bool isDestroyed;
 	bool isDestructable;
 	
+	float destructTimer;
+	
 	std::shared_ptr<TextureManager> txtManager;
 };
 

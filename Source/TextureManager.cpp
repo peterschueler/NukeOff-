@@ -54,6 +54,8 @@ std::string TextureManager::typeToFileName(Tile::Type _type) const {
 		return brickPath + "Bomb.png";
 	case Tile::Type::Brick_Nuke:
 		return brickPath + "Nuke.png";
+	case Tile::Type::Brick_Destroyed:
+		return brickPath + "Destroyed.png";
 	case Tile::Type::Wall_Long_Yellow:
 		return wallPath + "Long.png";
 	case Tile::Type::Wall_Short_Yellow:

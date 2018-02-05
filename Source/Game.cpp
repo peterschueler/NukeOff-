@@ -49,6 +49,7 @@ bool Game::update(sf::Time delta) {
 	auto brick_iter = bricks.begin();
 	while (brick_iter != bricks.end()) {
 		auto br = *brick_iter;
+		br->update(delta);
 		if (br->getDestroyed() == true) {
 			brick_iter = bricks.erase(brick_iter);
 		} else {
