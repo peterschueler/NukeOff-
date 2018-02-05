@@ -77,7 +77,6 @@ void Entity_Brick::update(sf::Time delta) {
 	if (destructTimer >= 1) {
 		destructTimer += delta.asSeconds();
 		attachTexture();
-		std::cout << "LOG: delta " << delta.asSeconds() << std::endl;
 		sprite.setColor(sf::Color(255,255,255,255/delta.asSeconds()));
 		sprite.setScale(destructTimer, destructTimer);
 	}
@@ -113,6 +112,10 @@ void Entity_Brick::setDestructable(bool destr) {
 
 bool Entity_Brick::getGestructable() const {
 	return isDestructable;
+}
+
+Tile::Type Entity_Brick::getType() const {
+	return tile.type;
 }
 
 void Entity_Brick::draw(sf::RenderTarget& target, sf::RenderStates states) const {

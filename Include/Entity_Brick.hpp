@@ -28,6 +28,8 @@ public:
 	void setDestructable(bool);
 	bool getGestructable() const;
 	
+	Tile::Type getType() const;
+	
 protected:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
 	void attachTexture();

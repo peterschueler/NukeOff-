@@ -52,6 +52,8 @@ private:
 	float upperBorder;
 	float lowerBorder;
 	
+	float ballSpeedScale;
+	
 	std::shared_ptr<TextureManager> txtManager;
 };
 

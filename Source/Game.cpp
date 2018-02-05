@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-Game::Game(sf::RenderWindow& win, sf::View& vw) : window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), upperBorder(40), lowerBorder(200) {
+Game::Game(sf::RenderWindow& win, sf::View& vw) : window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), upperBorder(40), lowerBorder(200), ballSpeedScale(1) {
 	txtManager = std::make_shared<TextureManager>(TextureManager());
 	
 	window.setView(view);
@@ -217,6 +217,13 @@ void Game::checkCollisions() {
 		auto bottom = br->borders().top + adjustedHeight;
 		
 		if (br->borders().intersects(ball->borders())) {
+			if (br->getType() == Tile::Type::Brick_SpeedUp) {
+				ballSpeedScale += 0.1;
+			} else if (br->getType() == Tile::Type::Brick_SpeedDown) {
+				ballSpeedScale -= 0.1;
+			}
+			ball->setSpeed(ballSpeedScale);
+		
 			if (ball->getPosition().y < top && ball->getPosition().x > left && ball->getPosition().x < right) {
 				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
 				currentBackground->setDirection(currentBackground->getDirection().x, -currentBackground->getDirection().y);

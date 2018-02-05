@@ -12,14 +12,14 @@ Entity_Ball::Entity_Ball() : sprite(7.5) {
 	txtManager = std::make_shared<TextureManager>();
 }
 
-Entity_Ball::Entity_Ball(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(7.5), tile(tile), txtManager(mgr) {
+Entity_Ball::Entity_Ball(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(7.5), tile(tile), txtManager(mgr), speed(1) {
 	attachTexture();
 	sprite.setOrigin(sprite.getRadius(), sprite.getRadius());
 }
 
 void Entity_Ball::update(sf::Time delta) {
 	rotate(-180 * delta.asSeconds());
-	move(direction * delta.asSeconds());
+	move(direction * speed * delta.asSeconds());
 }
 
 void Entity_Ball::setDirection(float vx, float vy) {
@@ -29,6 +29,10 @@ void Entity_Ball::setDirection(float vx, float vy) {
 
 sf::Vector2f Entity_Ball::getDirection() const {
 	return direction;
+}
+
+void Entity_Ball::setSpeed(float sp) {
+	speed = sp;
 }
 
 sf::FloatRect Entity_Ball::borders() const {

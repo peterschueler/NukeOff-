@@ -17,6 +17,8 @@ public:
 	
 	void setDirection(float, float);
 	sf::Vector2f getDirection() const;
+	
+	void setSpeed(float);
 		
 protected:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
@@ -25,6 +27,7 @@ protected:
 private:
 	sf::CircleShape sprite;
 	sf::Vector2f direction;
+	float speed;
 	
 	Tile tile;
 	std::shared_ptr<TextureManager> txtManager;
