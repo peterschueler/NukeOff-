@@ -27,6 +27,8 @@ bool Game::processInput(sf::Event& event) {
 		}  else if (event.key.code == sf::Keyboard::Space) {
 			ball->setDirection(30, 30);
 			currentBackground->setDirection(100,100);
+		} else if (event.key.code == sf::Keyboard::T) {
+			testFunc();
 		}
 	} else if (event.type == sf::Event::KeyReleased) {
 		if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Up) {
@@ -217,6 +219,7 @@ void Game::checkCollisions() {
 		auto bottom = br->borders().top + adjustedHeight;
 		
 		if (br->borders().intersects(ball->borders())) {
+			// MARK: Brick Collisions - Speed
 			if (br->getType() == Tile::Type::Brick_SpeedUp) {
 				ballSpeedScale += 0.1;
 			} else if (br->getType() == Tile::Type::Brick_SpeedDown) {
@@ -224,6 +227,7 @@ void Game::checkCollisions() {
 			}
 			ball->setSpeed(ballSpeedScale);
 		
+			// MARK: Ball Orientation
 			if (ball->getPosition().y < top && ball->getPosition().x > left && ball->getPosition().x < right) {
 				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
 				currentBackground->setDirection(currentBackground->getDirection().x, -currentBackground->getDirection().y);
@@ -239,6 +243,27 @@ void Game::checkCollisions() {
 			} else {
 				return;
 			}
+			
+			// MARK: Brick Collisions - Bomb
+			if (br->getType() == Tile::Type::Brick_Bomb) {
+			// - Compare to all others. Figure out which ones are adjacent.
+			// - destroy them.
+			for (auto inIter = bricks.begin(); inIter != bricks.end(); ++inIter) {
+				auto innerBrick = *inIter;
+				if (innerBrick->getRelativePosition().x == br->getRelativePosition().x) {
+					if (innerBrick->getRelativePosition().y + 1 == br->getRelativePosition().y || innerBrick->getRelativePosition().y - 1 == br->getRelativePosition().y) {
+						innerBrick->destroy();
+					}	
+				}
+				if (innerBrick->getRelativePosition().y == br->getRelativePosition().y) {
+					if (innerBrick->getRelativePosition().x + 1 == br->getRelativePosition().x || innerBrick->getRelativePosition().x - 1 == br->getRelativePosition().x) {
+						innerBrick->destroy();
+					}
+				}
+			}
+			br->destroy();
+			return;
+		}
 			
 			br->destroy();
 			return;
@@ -260,4 +285,7 @@ void Game::checkCollisions() {
 			}
 		}
 	}
+}
+
+void Game::testFunc() {
 }

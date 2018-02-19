@@ -63,7 +63,7 @@ Tile Level::tokensToTile(std::vector<std::string> tokens) {
 		tile.type = Tile::Type::Brick_SpeedUp;
 	} else if (type == "D") {
 		tile.type = Tile::Type::Brick_SpeedDown;
-	} else if (type == "B") {
+	} else if (type == "BO") {
 		tile.type = Tile::Type::Brick_Bomb;
 	} else if (type == "N") {
 		tile.type = Tile::Type::Brick_Nuke;

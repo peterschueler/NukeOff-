@@ -36,6 +36,8 @@ private:
 	
 	void checkCollisions();
 	
+	void testFunc();
+	
 	sf::RenderWindow& window;
 	sf::View& view;
 	sf::FloatRect bounds;

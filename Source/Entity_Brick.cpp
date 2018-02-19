@@ -118,6 +118,10 @@ Tile::Type Entity_Brick::getType() const {
 	return tile.type;
 }
 
+sf::Vector2f Entity_Brick::getRelativePosition() const {
+	return sf::Vector2f(tile.x, tile.y);
+}
+
 void Entity_Brick::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	

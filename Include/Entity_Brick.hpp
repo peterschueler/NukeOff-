@@ -29,6 +29,7 @@ public:
 	bool getGestructable() const;
 	
 	Tile::Type getType() const;
+	sf::Vector2f getRelativePosition() const;
 	
 protected:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
