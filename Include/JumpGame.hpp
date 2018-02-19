@@ -29,6 +29,8 @@ private:
 	sf::View& view;
 	sf::FloatRect bounds;
 	
+	std::unique_ptr<Entity_Ball> character;
+	
 	std::shared_ptr<TextureManager> txtManager;
 	
 	bool gameOver;

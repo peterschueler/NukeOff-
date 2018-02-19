@@ -17,6 +17,7 @@ public:
 	
 	void setDirection(float, float);
 	sf::Vector2f getDirection() const;
+	void stop();
 	
 	void setSpeed(float);
 		

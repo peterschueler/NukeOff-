@@ -18,7 +18,11 @@ Entity_Ball::Entity_Ball(Tile tile, const std::shared_ptr<TextureManager>& mgr):
 }
 
 void Entity_Ball::update(sf::Time delta) {
-	rotate(-180 * delta.asSeconds());
+	if (direction.x > 0) {
+		rotate(180 * delta.asSeconds());
+	} else if (direction.x < 0) {
+		rotate(-180 * delta.asSeconds());
+	}
 	move(direction * speed * delta.asSeconds());
 }
 
@@ -29,6 +33,10 @@ void Entity_Ball::setDirection(float vx, float vy) {
 
 sf::Vector2f Entity_Ball::getDirection() const {
 	return direction;
+}
+
+void Entity_Ball::stop() {
+	direction.x = 0;
 }
 
 void Entity_Ball::setSpeed(float sp) {
