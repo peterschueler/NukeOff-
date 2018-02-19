@@ -1,6 +1,4 @@
 #include "../Include/Application.hpp"
-#include "../Include/Menu.hpp"
-#include "../Include/Game.hpp"
 
 const sf::Time Application::secondsFramesRatio = sf::seconds(1.f/60.f);
 

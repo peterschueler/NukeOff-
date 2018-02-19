@@ -9,6 +9,7 @@
 #include "State.hpp"
 #include "Menu.hpp"
 #include "Game.hpp"
+#include "JumpGame.hpp"
 
 class Application {
 public:
