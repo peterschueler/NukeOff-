@@ -17,10 +17,16 @@ public:
 	sf::Vector2f getAdjustedPosition() const;
 	
 	void moveUp(float);
+	void setDirection(float, float);
 	sf::Vector2f getDirection() const {
 		return direction;
 	};
+	void invertDirectionX();	
+
 	void stop();
+	void setColor(sf::Color color) {
+		sprite.setColor(color);
+	};
 	
 protected:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;

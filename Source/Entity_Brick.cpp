@@ -148,4 +148,5 @@ void Entity_Brick::attachTexture() {
 	txtManager->load(tile.type);
 	sprite.setTexture(txtManager->get(tile.type));
 	sprite.setTextureRect(rect);
+	sprite.setRotation(tile.rotation);
 }

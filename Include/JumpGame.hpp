@@ -11,6 +11,7 @@
 #include "Entity_Brick.hpp"
 #include "Entity_Wall.hpp"
 #include "Entity_Ball.hpp"
+#include "Entity_Paddle.hpp"
 #include "TextureManager.hpp"
 
 class JumpGame : public sf::NonCopyable, public State {
@@ -25,6 +26,7 @@ private:
 	// There's only a single level. It's an interlude, not a full-on game.
 	void buildLevel();
 	void checkCollision();
+	void flipMirrorPaddle();
 
 	sf::RenderWindow& window;
 	sf::View& view;
@@ -33,7 +35,9 @@ private:
 	float elapsedProjectileTime;
 	
 	std::unique_ptr<Entity_Ball> character;
+	std::unique_ptr<Entity_Paddle> mirrorPaddle;
 	std::vector<std::shared_ptr<Entity_Wall> > walls;
+	std::vector<std::shared_ptr<Entity_Wall> > topWalls;
 	std::vector<std::shared_ptr<Entity_Brick> > projectiles;
 	
 	std::shared_ptr<TextureManager> txtManager;

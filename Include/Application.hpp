@@ -28,7 +28,7 @@ private:
 	
 	State* currentState;
 	Menu menuState;
-	Game gameState;
+	JumpGame gameState;
 };
 
 #endif

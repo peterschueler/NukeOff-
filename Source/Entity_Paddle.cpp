@@ -46,6 +46,15 @@ void Entity_Paddle::stop() {
 	direction.y = 0;
 }
 
+void Entity_Paddle::setDirection(float vy, float vx) {
+	direction.y = vy;
+	direction.x = vx;
+}
+
+void Entity_Paddle::invertDirectionX() {
+	direction.x = -direction.x;
+}
+
 void Entity_Paddle::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	
@@ -64,4 +73,5 @@ void Entity_Paddle::attachTexture() {
 	txtManager->load(tile.type);
 	sprite.setTexture(txtManager->get(tile.type));
 	sprite.setTextureRect(rect);
+	sprite.setRotation(tile.rotation);
 }

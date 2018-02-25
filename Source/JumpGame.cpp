@@ -9,6 +9,12 @@ JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), 
 	auto ballTile = Tile(0,0,0,Tile::Type::Ball_Default);
 	character = std::make_unique<Entity_Ball>(Entity_Ball(ballTile, txtManager));
 	character->setPosition(300,212);
+	
+	auto paddleTile = Tile(0,0,90,Tile::Type::Paddle_Long);
+	mirrorPaddle = std::make_unique<Entity_Paddle>(Entity_Paddle(paddleTile, txtManager));
+	mirrorPaddle->setPosition(150,15);
+	mirrorPaddle->setDirection(0, 70);
+	mirrorPaddle->setColor(sf::Color::Red);
 }
 
 bool JumpGame::processInput(sf::Event& event) {
@@ -34,6 +40,8 @@ bool JumpGame::update(sf::Time delta) {
 		return false;
 	}
 	character->update(delta);
+	mirrorPaddle->update(delta);
+	flipMirrorPaddle();
 	for (auto projectile : projectiles) {
 		projectile->update(delta);
 	}
@@ -54,7 +62,11 @@ bool JumpGame::update(sf::Time delta) {
 void JumpGame::render() {
 	window.clear(sf::Color::Black);
 	window.draw(*character);
+	window.draw(*mirrorPaddle);
 	for (auto wall : walls) {
+		window.draw(*wall);
+	}
+	for (auto wall : topWalls) {
 		window.draw(*wall);
 	}
 	for (auto projectile : projectiles) {
@@ -64,11 +76,20 @@ void JumpGame::render() {
 }
 
 void JumpGame::buildLevel() {
+	// MARK - buildLevel() Floor
 	std::vector<Tile> floors = {Tile(0, 240, 270, Tile::Type::Wall_Corner_Yellow), Tile(50,240,180, Tile::Type::Wall_Medium_Yellow), Tile(110,240,180, Tile::Type::Wall_Long_Yellow), Tile(130,240,180,Tile::Type::Wall_Short_Yellow), Tile(190,240,180,Tile::Type::Wall_Long_Yellow), Tile(210,240,180,Tile::Type::Wall_Short_Yellow),Tile(270,240,180,Tile::Type::Wall_Long_Yellow), Tile(300,240,180,Tile::Type::Wall_Medium_Yellow), Tile(320, 240, 180, Tile::Type::Wall_Corner_Yellow)};
 	for (auto wall : floors) {
 		auto wl = std::make_shared<Entity_Wall>(Entity_Wall(wall, 0, txtManager));
 		walls.push_back(wl);
 	}
+	
+	// MARK - buildLevel() Top Walls
+	std::vector<Tile> tops = {Tile(0,0,0, Tile::Type::Wall_Corner_Yellow), Tile(0,40,270, Tile::Type::Wall_Corner_Yellow), Tile(40,40,180, Tile::Type::Wall_Corner_Yellow),Tile(40,0,90, Tile::Type::Wall_Corner_Yellow), Tile(280,0,0, Tile::Type::Wall_Corner_Yellow), Tile(280,40,270, Tile::Type::Wall_Corner_Yellow), Tile(320,40,180, Tile::Type::Wall_Corner_Yellow),Tile(320,0,90, Tile::Type::Wall_Corner_Yellow)};
+	for (auto wall : tops) {
+		auto wl = std::make_shared<Entity_Wall>(Entity_Wall(wall, 0, txtManager));
+		topWalls.push_back(wl);
+	}
+	
 	Tile t = Tile();
 	t.type = Tile::Type::Brick_Basic_Green;
 	auto prj = std::make_shared<Entity_Brick>(Entity_Brick(t, txtManager));
@@ -78,6 +99,7 @@ void JumpGame::buildLevel() {
 }
 
 void JumpGame::checkCollision() {
+	// MARK - checkCollision() Projectiles
 	for (auto iter = projectiles.begin(); iter != projectiles.end(); ++iter) {
 		auto prj = *iter;
 		
@@ -85,5 +107,15 @@ void JumpGame::checkCollision() {
 			prj->destroy();
 			return;
 		}
+	}
+}
+
+void JumpGame::flipMirrorPaddle() {
+	if (mirrorPaddle->getPosition().x < 80) {
+		mirrorPaddle->invertDirectionX();
+	} else if (mirrorPaddle->getPosition().x > 280) {
+		mirrorPaddle->invertDirectionX();
+	} else {
+		return;
 	}
 }
