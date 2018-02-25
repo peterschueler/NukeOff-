@@ -24,12 +24,17 @@ public:
 private:
 	// There's only a single level. It's an interlude, not a full-on game.
 	void buildLevel();
+	void checkCollision();
 
 	sf::RenderWindow& window;
 	sf::View& view;
 	sf::FloatRect bounds;
 	
+	float elapsedProjectileTime;
+	
 	std::unique_ptr<Entity_Ball> character;
+	std::vector<std::shared_ptr<Entity_Wall> > walls;
+	std::vector<std::shared_ptr<Entity_Brick> > projectiles;
 	
 	std::shared_ptr<TextureManager> txtManager;
 	

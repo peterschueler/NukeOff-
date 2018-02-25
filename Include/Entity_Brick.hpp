@@ -22,6 +22,9 @@ public:
 	sf::FloatRect borders() const;
 	sf::Vector2f getCenter() const;
 	
+	void setDirection(float, float);
+	sf::Vector2f getDirection() const;
+	
 	void destroy();
 	bool getDestroyed() const;
 	
@@ -40,9 +43,11 @@ private:
 	sf::Sprite sprite;
 	
 	Tile tile;
+	sf::Vector2f direction;
 	
 	bool isDestroyed;
 	bool isDestructable;
+	bool hasCollided;
 	
 	float destructTimer;
 	

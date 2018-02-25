@@ -58,7 +58,7 @@ Entity_Brick::Entity_Brick(): sprite(), isDestroyed(false), destructTimer(0) {
 	txtManager = std::make_shared<TextureManager>();
 }
 
-Entity_Brick::Entity_Brick(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(), isDestroyed(false), destructTimer(0), tile(tile), txtManager(mgr) {
+Entity_Brick::Entity_Brick(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(), isDestroyed(false), hasCollided(false), destructTimer(0), tile(tile), txtManager(mgr) {
 	if (tile.type == Tile::Type::Brick_Hard) {
 		setDestructable(false);
 	} else {
@@ -80,6 +80,7 @@ void Entity_Brick::update(sf::Time delta) {
 		sprite.setColor(sf::Color(255,255,255,255/delta.asSeconds()));
 		sprite.setScale(destructTimer, destructTimer);
 	}
+	move(direction * delta.asSeconds());
 }
 	
 sf::FloatRect Entity_Brick::borders() const {
@@ -92,11 +93,25 @@ sf::Vector2f Entity_Brick::getCenter() const {
 	auto yCenter = borders().height / 2;
 	return sf::Vector2f(xCenter, yCenter);
 }
+
+void Entity_Brick::setDirection(float vx, float vy) {
+	direction.x = vx;
+	direction.y = vy;
+}
+
+sf::Vector2f Entity_Brick::getDirection() const {
+	return direction;
+}
 	
 void Entity_Brick::destroy() {
-	tile.type = Tile::Type::Brick_Destroyed;
-	attachTexture();
-	destructTimer = 1;
+	if (!hasCollided) {
+		tile.type = Tile::Type::Brick_Destroyed;
+		attachTexture();
+		destructTimer = 1;
+		hasCollided = true;
+	} else {
+		return;
+	}
 }
 
 bool Entity_Brick::getDestroyed() const {
