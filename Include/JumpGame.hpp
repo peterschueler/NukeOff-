@@ -27,6 +27,7 @@ private:
 	void buildLevel();
 	void checkCollision();
 	void flipMirrorPaddle();
+	void fireProjectile(sf::Time);
 
 	sf::RenderWindow& window;
 	sf::View& view;

@@ -1,6 +1,15 @@
 #include "../Include/JumpGame.hpp"
 
-JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false) {
+#include <iostream>
+#include <random>
+
+template <typename T>
+void moveItemToBack(std::vector<T>& v, size_t index) {
+	auto it = v.begin() + index;
+	std::rotate(it, it + 1, v.end());
+}
+
+JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), elapsedProjectileTime(2), gameOver(false) {
 	txtManager = std::make_shared<TextureManager>(TextureManager());
 	
 	window.setView(view);
@@ -57,6 +66,7 @@ bool JumpGame::update(sf::Time delta) {
 			++prj_iter;
 		}
 	}
+	fireProjectile(delta);
 }
 
 void JumpGame::render() {
@@ -90,12 +100,18 @@ void JumpGame::buildLevel() {
 		topWalls.push_back(wl);
 	}
 	
-	Tile t = Tile();
-	t.type = Tile::Type::Brick_Basic_Green;
-	auto prj = std::make_shared<Entity_Brick>(Entity_Brick(t, txtManager));
-	prj->setPosition(200, -20);
-	prj->setDirection(0, 20);
-	projectiles.push_back(prj);
+	// A random number of projectiles
+	std::random_device generator;
+	std::uniform_int_distribution<int> distrbution(25,50);
+	
+	auto capacity = distrbution(generator);
+	while (capacity > 0) {
+		Tile t = Tile();
+		t.type = Tile::Type::Brick_Basic_Green;
+		auto prj = std::make_shared<Entity_Brick>(Entity_Brick(t, txtManager));
+		projectiles.push_back(prj);
+		--capacity;
+	}
 }
 
 void JumpGame::checkCollision() {
@@ -117,5 +133,18 @@ void JumpGame::flipMirrorPaddle() {
 		mirrorPaddle->invertDirectionX();
 	} else {
 		return;
+	}
+}
+
+void JumpGame::fireProjectile(sf::Time delta) {
+	if (elapsedProjectileTime > 4) {
+		elapsedProjectileTime = 0;
+		auto paddlePos = mirrorPaddle->getPosition();
+		auto prj = projectiles.front();
+		prj->setPosition(paddlePos);
+		prj->setDirection(0, 20);
+		moveItemToBack(projectiles, 0);
+	} else {
+		elapsedProjectileTime += delta.asSeconds();
 	}
 }
