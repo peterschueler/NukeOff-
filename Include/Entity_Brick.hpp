@@ -33,12 +33,15 @@ public:
 	
 	Tile::Type getType() const;
 	sf::Vector2f getRelativePosition() const;
+	unsigned int getValue() const;
 	
 protected:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
 	void attachTexture();
 	
 private:
+
+	void updateValue(Tile::Type);
 
 	sf::Sprite sprite;
 	
@@ -50,6 +53,8 @@ private:
 	bool hasCollided;
 	
 	float destructTimer;
+	
+	unsigned int value;
 	
 	std::shared_ptr<TextureManager> txtManager;
 };

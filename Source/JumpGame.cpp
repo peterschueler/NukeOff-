@@ -9,7 +9,7 @@ void moveItemToBack(std::vector<T>& v, size_t index) {
 	std::rotate(it, it + 1, v.end());
 }
 
-JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), elapsedProjectileTime(2), gameOver(false) {
+JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), elapsedProjectileTime(2), integrity(100), gameOver(false) {
 	txtManager = std::make_shared<TextureManager>(TextureManager());
 	
 	window.setView(view);
@@ -45,7 +45,7 @@ bool JumpGame::processInput(sf::Event& event) {
 }
 
 bool JumpGame::update(sf::Time delta) {
-	if (gameOver) {
+	if (gameOver || integrity == 0 || projectiles.size() == 0) {
 		return false;
 	}
 	character->update(delta);
@@ -102,12 +102,24 @@ void JumpGame::buildLevel() {
 	
 	// A random number of projectiles
 	std::random_device generator;
-	std::uniform_int_distribution<int> distrbution(25,50);
+	std::uniform_int_distribution<int> projectileDistrbution(25,50);
+	std::uniform_int_distribution<int> tileDistribution(1,5);
 	
-	auto capacity = distrbution(generator);
+	auto capacity = projectileDistrbution(generator);
 	while (capacity > 0) {
+		auto tileType = tileDistribution(generator);
 		Tile t = Tile();
-		t.type = Tile::Type::Brick_Basic_Green;
+		if (tileType == 1) {
+			t.type = Tile::Type::Brick_Basic_Green;
+		} else if (tileType == 2) {
+			t.type = Tile::Type::Brick_Basic_Red;
+		} else if (tileType == 3) {
+			t.type = Tile::Type::Brick_Basic_Yellow;
+		} else if (tileType == 4) {
+			t.type = Tile::Type::Brick_Basic_Blue;
+		} else if (tileType == 5) {
+			t.type = Tile::Type::Brick_Basic_Purple;
+		}
 		auto prj = std::make_shared<Entity_Brick>(Entity_Brick(t, txtManager));
 		projectiles.push_back(prj);
 		--capacity;
@@ -121,6 +133,11 @@ void JumpGame::checkCollision() {
 		
 		if (prj->borders().intersects(character->borders())) {
 			prj->destroy();
+			return;
+		}
+		
+		if (prj->getPosition().y > 220) {
+			loseIntegrity(prj);
 			return;
 		}
 	}
@@ -137,14 +154,30 @@ void JumpGame::flipMirrorPaddle() {
 }
 
 void JumpGame::fireProjectile(sf::Time delta) {
-	if (elapsedProjectileTime > 4) {
+	if (elapsedProjectileTime > 2) {
 		elapsedProjectileTime = 0;
 		auto paddlePos = mirrorPaddle->getPosition();
 		auto prj = projectiles.front();
 		prj->setPosition(paddlePos);
-		prj->setDirection(0, 20);
+		prj->setDirection(0, 45);
 		moveItemToBack(projectiles, 0);
 	} else {
 		elapsedProjectileTime += delta.asSeconds();
 	}
+}
+
+void JumpGame::loseIntegrity(std::shared_ptr<Entity_Brick> projectile) {
+	// Tile type determines the amount of deterioration.
+	if (projectile->getType() == Tile::Type::Brick_Basic_Green) {
+		integrity = integrity - 30;
+	} else if (projectile->getType() == Tile::Type::Brick_Basic_Red) {
+		integrity = integrity - 20;
+	} else if (projectile->getType() == Tile::Type::Brick_Basic_Blue) {
+		integrity = integrity - 40;	
+	} else if (projectile->getType() == Tile::Type::Brick_Basic_Yellow) {
+		integrity = integrity - 10;
+	} else if (projectile->getType() == Tile::Type::Brick_Basic_Purple) {
+		integrity = integrity - 50;
+	}
+	projectile->destroy();
 }

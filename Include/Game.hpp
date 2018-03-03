@@ -49,7 +49,9 @@ private:
 	std::unique_ptr<Entity_Paddle> paddle;
 	std::unique_ptr<Entity_Ball> ball;
 	std::unique_ptr<Entity_Background> currentBackground;
-	bool gameOver;
+
+	bool gameOver;	
+	unsigned int points;
 	
 	float upperBorder;
 	float lowerBorder;

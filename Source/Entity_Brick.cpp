@@ -56,6 +56,7 @@ Entity_Brick::Entity_Brick(): sprite(), isDestroyed(false), destructTimer(0) {
 	attachTexture();
 	sprite.setOrigin(getCenter().x / 2, getCenter().y / 2);
 	txtManager = std::make_shared<TextureManager>();
+	updateValue(tile.type);
 }
 
 Entity_Brick::Entity_Brick(Tile tile, const std::shared_ptr<TextureManager>& mgr): sprite(), isDestroyed(false), hasCollided(false), destructTimer(0), tile(tile), txtManager(mgr) {
@@ -68,6 +69,7 @@ Entity_Brick::Entity_Brick(Tile tile, const std::shared_ptr<TextureManager>& mgr
 	sprite.setOrigin(getCenter().x / 2, getCenter().y / 2);
 	std::pair<int, int> coords = convertTileSpaceToRealSpace(tile);
 	setPosition(coords.first, coords.second);
+	updateValue(tile.type);
 }
 
 void Entity_Brick::update(sf::Time delta) {
@@ -137,6 +139,10 @@ sf::Vector2f Entity_Brick::getRelativePosition() const {
 	return sf::Vector2f(tile.x, tile.y);
 }
 
+unsigned int Entity_Brick::getValue() const {
+	return value;
+}
+
 void Entity_Brick::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	
@@ -149,4 +155,20 @@ void Entity_Brick::attachTexture() {
 	sprite.setTexture(txtManager->get(tile.type));
 	sprite.setTextureRect(rect);
 	sprite.setRotation(tile.rotation);
+}
+
+void Entity_Brick::updateValue(Tile::Type type) {
+	if (type == Tile::Type::Brick_Basic_Yellow) {
+		value = 10;
+	} else if (type == Tile::Type::Brick_Basic_Red) {
+		value = 20;
+	} else if (type == Tile::Type::Brick_Basic_Blue) {
+		value = 30;
+	} else if (type == Tile::Type::Brick_Basic_Green) {
+		value = 40;
+	} else if (type == Tile::Type::Brick_Basic_Purple) {
+		value = 50;
+	} else {
+		value = 0;
+	}
 }

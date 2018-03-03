@@ -28,12 +28,15 @@ private:
 	void checkCollision();
 	void flipMirrorPaddle();
 	void fireProjectile(sf::Time);
+	// Every time a brick hits the floor, the world becomes less stable.
+	void loseIntegrity(std::shared_ptr<Entity_Brick>);
 
 	sf::RenderWindow& window;
 	sf::View& view;
 	sf::FloatRect bounds;
 	
 	float elapsedProjectileTime;
+	unsigned int integrity;
 	
 	std::unique_ptr<Entity_Ball> character;
 	std::unique_ptr<Entity_Paddle> mirrorPaddle;
