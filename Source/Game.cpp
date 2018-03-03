@@ -41,33 +41,33 @@ bool Game::processInput(sf::Event& event) {
 bool Game::update(sf::Time delta) {
 	if (gameOver) {
 		return false;
-	}
+	} else {
+		paddle->update(delta);
+		ball->update(delta);
+		currentBackground->update(delta);
+		checkCollisions();
 	
-	paddle->update(delta);
-	ball->update(delta);
-	currentBackground->update(delta);
-	checkCollisions();
-	
-	auto brick_iter = bricks.begin();
-	while (brick_iter != bricks.end()) {
-		auto br = *brick_iter;
-		br->update(delta);
-		if (br->getDestroyed() == true) {
-			brick_iter = bricks.erase(brick_iter);
-		} else {
-			++brick_iter;
+		auto brick_iter = bricks.begin();
+		while (brick_iter != bricks.end()) {
+			auto br = *brick_iter;
+			br->update(delta);
+			if (br->getDestroyed() == true) {
+				brick_iter = bricks.erase(brick_iter);
+			} else {
+				++brick_iter;
+			}
 		}
-	}
 	
-	if (ball->getPosition().x > 330) {
-		gameOver = true;
-	}
+		if (ball->getPosition().x > 330) {
+			gameOver = true;
+		}
 	
-	if (bricks.size() == 0) {
-		nextLevel();
-	}
+		if (bricks.size() == 0) {
+			nextLevel();
+		}
 	
-	return true;
+		return true;
+	}
 }
 
 void Game::render() {

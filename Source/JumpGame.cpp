@@ -47,26 +47,28 @@ bool JumpGame::processInput(sf::Event& event) {
 bool JumpGame::update(sf::Time delta) {
 	if (gameOver || integrity == 0 || projectiles.size() == 0) {
 		return false;
-	}
-	character->update(delta);
-	mirrorPaddle->update(delta);
-	flipMirrorPaddle();
-	for (auto projectile : projectiles) {
-		projectile->update(delta);
-	}
-	checkCollision();
-	
-	auto prj_iter = projectiles.begin();
-	while (prj_iter != projectiles.end()) {
-		auto prj = *prj_iter;
-		prj->update(delta);
-		if (prj->getDestroyed() == true) {
-			prj_iter = projectiles.erase(prj_iter);
-		} else {
-			++prj_iter;
+	} else  {
+		character->update(delta);
+		mirrorPaddle->update(delta);
+		flipMirrorPaddle();
+		for (auto projectile : projectiles) {
+			projectile->update(delta);
 		}
+		checkCollision();
+	
+		auto prj_iter = projectiles.begin();
+		while (prj_iter != projectiles.end()) {
+			auto prj = *prj_iter;
+			prj->update(delta);
+			if (prj->getDestroyed() == true) {
+				prj_iter = projectiles.erase(prj_iter);
+			} else {
+				++prj_iter;
+			}
+		}
+		fireProjectile(delta);
+		return false;
 	}
-	fireProjectile(delta);
 }
 
 void JumpGame::render() {
