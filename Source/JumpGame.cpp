@@ -9,7 +9,7 @@ void moveItemToBack(std::vector<T>& v, size_t index) {
 	std::rotate(it, it + 1, v.end());
 }
 
-JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), elapsedProjectileTime(2), integrity(100), gameOver(false) {
+JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), elapsedProjectileTime(2), corruption(0), gameOver(false) {
 	txtManager = std::make_shared<TextureManager>(TextureManager());
 	
 	window.setView(view);
@@ -23,7 +23,7 @@ JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), 
 	mirrorPaddle = std::make_unique<Entity_Paddle>(Entity_Paddle(paddleTile, txtManager));
 	mirrorPaddle->setPosition(150,15);
 	mirrorPaddle->setDirection(0, 70);
-	mirrorPaddle->setColor(sf::Color::Red);
+	mirrorPaddle->setColor(sf::Color::Magenta);
 	
 	auto bckTile = Tile(0,0,0, Tile::Type::Background_BrickWall);
 	currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile, txtManager));
@@ -49,7 +49,7 @@ bool JumpGame::processInput(sf::Event& event) {
 }
 
 bool JumpGame::update(sf::Time delta) {
-	if (gameOver || integrity == 0 || projectiles.size() == 0) {
+	if (gameOver || corruption > 220 || projectiles.size() == 0) {
 		return false;
 	} else  {
 		character->update(delta);
@@ -144,7 +144,7 @@ void JumpGame::checkCollision() {
 		}
 		
 		if (prj->getPosition().y > 220) {
-			loseIntegrity(prj);
+			increaseCorruption(prj);
 			return;
 		}
 	}
@@ -173,18 +173,19 @@ void JumpGame::fireProjectile(sf::Time delta) {
 	}
 }
 
-void JumpGame::loseIntegrity(std::shared_ptr<Entity_Brick> projectile) {
+void JumpGame::increaseCorruption(std::shared_ptr<Entity_Brick> projectile) {
 	// Tile type determines the amount of deterioration.
 	if (projectile->getType() == Tile::Type::Brick_Basic_Green) {
-		integrity = integrity - 30;
+		corruption = corruption + 30;
 	} else if (projectile->getType() == Tile::Type::Brick_Basic_Red) {
-		integrity = integrity - 20;
+		corruption = corruption + 20;
 	} else if (projectile->getType() == Tile::Type::Brick_Basic_Blue) {
-		integrity = integrity - 40;	
+		corruption = corruption + 40;	
 	} else if (projectile->getType() == Tile::Type::Brick_Basic_Yellow) {
-		integrity = integrity - 10;
+		corruption = corruption + 10;
 	} else if (projectile->getType() == Tile::Type::Brick_Basic_Purple) {
-		integrity = integrity - 50;
+		corruption = corruption + 50;
 	}
+	currentBackground->setPosition(currentBackground->getPosition().x, corruption);
 	projectile->destroy();
 }
