@@ -3,11 +3,11 @@
 
 #include <iostream>
 
-Entity_Background::Entity_Background() : sprite() {
+Entity_Background::Entity_Background() : sprite(), scaleX(320), scaleY(240) {
 	attachTexture();
 }
 
-Entity_Background::Entity_Background(Tile tile, const std::shared_ptr<TextureManager>& mgr) : sprite(), txtManager(mgr), tile(tile) {
+Entity_Background::Entity_Background(Tile tile, const std::shared_ptr<TextureManager>& mgr) : sprite(), txtManager(mgr), tile(tile), scaleX(320), scaleY(240) {
 	attachTexture();
 }
 
@@ -29,6 +29,12 @@ sf::Vector2f Entity_Background::getDirection() const {
 	return direction;
 }
 
+void Entity_Background::setScale(int _x, int _y) {
+	scaleX = _x;
+	scaleY = _y;
+	attachTexture();
+}
+
 void Entity_Background::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	
@@ -36,11 +42,13 @@ void Entity_Background::draw(sf::RenderTarget& target, sf::RenderStates states) 
 }
 
 void Entity_Background::attachTexture() {
-	int y_axis = 2560;
-	int x_axis = 1920;
+	int x_axis = scaleX;
+	int y_axis = scaleY;
 	
 	sf::IntRect rect = sf::IntRect(0,0,x_axis, y_axis);
 	txtManager->load(tile.type);
-	sprite.setTexture(txtManager->get(tile.type));
+	sf::Texture& texture = txtManager->get(tile.type);
+	texture.setRepeated(true);
+	sprite.setTexture(texture);
 	sprite.setTextureRect(rect);
 }

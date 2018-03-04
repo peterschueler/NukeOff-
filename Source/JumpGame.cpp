@@ -24,6 +24,10 @@ JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), 
 	mirrorPaddle->setPosition(150,15);
 	mirrorPaddle->setDirection(0, 70);
 	mirrorPaddle->setColor(sf::Color::Red);
+	
+	auto bckTile = Tile(0,0,0, Tile::Type::Background_BrickWall);
+	currentBackground = std::make_unique<Entity_Background>(Entity_Background(bckTile, txtManager));
+	currentBackground->setScale(320,240);
 }
 
 bool JumpGame::processInput(sf::Event& event) {
@@ -73,6 +77,7 @@ bool JumpGame::update(sf::Time delta) {
 
 void JumpGame::render() {
 	window.clear(sf::Color::Black);
+	window.draw(*currentBackground);
 	window.draw(*character);
 	window.draw(*mirrorPaddle);
 	for (auto wall : walls) {

@@ -29,6 +29,7 @@ struct Tile {
 		Background_03,
 		Background_04,
 		Background_05,
+		Background_BrickWall,
 	};
 	
 	Tile(): x(0), y(0), rotation(0), type(Tile::Type::Default) {

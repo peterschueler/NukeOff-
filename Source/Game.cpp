@@ -174,6 +174,7 @@ void Game::resetLevel(unsigned int number) {
 	} else {
 		std::cerr << "ERROR: Couldn't load background for level " << number << std::endl;
 	}
+	currentBackground->setScale(1920, 2560);
 
 	auto paddleTile = Tile(0,0,0,Tile::Type::Paddle_Short);
 	paddle = std::make_unique<Entity_Paddle>(Entity_Paddle(paddleTile, txtManager));

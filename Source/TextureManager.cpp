@@ -80,5 +80,7 @@ std::string TextureManager::typeToFileName(Tile::Type _type) const {
 		return backgroundPath + "04.png";
 	case Tile::Type::Background_05:
 		return backgroundPath + "05.png";
+	case Tile::Type::Background_BrickWall:
+		return backgroundPath + "BrickWall.png";
 	}
 }

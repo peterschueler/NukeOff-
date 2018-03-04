@@ -12,6 +12,7 @@
 #include "Entity_Wall.hpp"
 #include "Entity_Ball.hpp"
 #include "Entity_Paddle.hpp"
+#include "Entity_Background.hpp"
 #include "TextureManager.hpp"
 
 class JumpGame : public sf::NonCopyable, public State {
@@ -43,6 +44,7 @@ private:
 	std::vector<std::shared_ptr<Entity_Wall> > walls;
 	std::vector<std::shared_ptr<Entity_Wall> > topWalls;
 	std::vector<std::shared_ptr<Entity_Brick> > projectiles;
+	std::unique_ptr<Entity_Background> currentBackground;
 	
 	std::shared_ptr<TextureManager> txtManager;
 	

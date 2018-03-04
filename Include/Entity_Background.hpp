@@ -17,6 +17,8 @@ public:
 	void setDirection(float, float);
 	sf::Vector2f getDirection() const;
 	
+	void setScale(int, int);
+	
 protected:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
 	void attachTexture();
@@ -26,6 +28,8 @@ private:
 	Tile tile;
 	
 	sf::Vector2f direction;
+	int scaleX;
+	int scaleY;
 	
 	std::shared_ptr<TextureManager> txtManager;
 };
