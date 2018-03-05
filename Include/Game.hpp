@@ -22,8 +22,9 @@ public:
 	explicit Game(sf::RenderWindow&, sf::View&);
 	
 	bool processInput(sf::Event&);
-	bool update(sf::Time);
+	ExitState update(sf::Time);
 	void render();
+	void resetNuke() { gotNuked = false; };
 	
 private:
 	void selectLevel(unsigned int);
@@ -50,7 +51,8 @@ private:
 	std::unique_ptr<Entity_Ball> ball;
 	std::unique_ptr<Entity_Background> currentBackground;
 
-	bool gameOver;	
+	bool gameOver;
+	bool gotNuked;
 	unsigned int points;
 	
 	float upperBorder;

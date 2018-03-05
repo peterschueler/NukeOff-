@@ -28,7 +28,10 @@ private:
 	
 	State* currentState;
 	Menu menuState;
-	JumpGame gameState;
+	Game gameState;
+	JumpGame jumpGameState;
+	
+	std::vector<State*> selectableStates;
 };
 
 #endif

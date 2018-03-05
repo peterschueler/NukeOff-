@@ -11,8 +11,9 @@ public:
 	explicit Menu(sf::RenderWindow&);
 	
 	bool processInput(sf::Event&);
-	bool update(sf::Time);
+	ExitState update(sf::Time);
 	void render();
+	void resetNuke() {};
 	
 private:
 	sf::RenderWindow& window;

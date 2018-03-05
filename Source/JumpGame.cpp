@@ -9,7 +9,7 @@ void moveItemToBack(std::vector<T>& v, size_t index) {
 	std::rotate(it, it + 1, v.end());
 }
 
-JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), elapsedProjectileTime(2), corruption(0), gameOver(false) {
+JumpGame::JumpGame(sf::RenderWindow& win, sf::View& vw): window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), elapsedProjectileTime(2), corruption(0), gameOver(false), gotNuked(false) {
 	txtManager = std::make_shared<TextureManager>(TextureManager());
 	
 	window.setView(view);
@@ -48,10 +48,12 @@ bool JumpGame::processInput(sf::Event& event) {
 	return true;
 }
 
-bool JumpGame::update(sf::Time delta) {
+ExitState JumpGame::update(sf::Time delta) {
 	if (gameOver || corruption > 220 || projectiles.size() == 0) {
-		return false;
-	} else  {
+		return ExitState::GameOver;
+	} else if (gotNuked) {
+		return ExitState::Nuked;
+	} else {
 		character->update(delta);
 		mirrorPaddle->update(delta);
 		flipMirrorPaddle();
@@ -71,7 +73,7 @@ bool JumpGame::update(sf::Time delta) {
 			}
 		}
 		fireProjectile(delta);
-		return false;
+		return ExitState::Running;
 	}
 }
 
@@ -117,13 +119,13 @@ void JumpGame::buildLevel() {
 		auto tileType = tileDistribution(generator);
 		Tile t = Tile();
 		if (tileType == 1) {
-			t.type = Tile::Type::Brick_Basic_Green;
+			t.type = Tile::Type::Brick_Nuke;
 		} else if (tileType == 2) {
-			t.type = Tile::Type::Brick_Basic_Red;
+			t.type = Tile::Type::Brick_Nuke;
 		} else if (tileType == 3) {
-			t.type = Tile::Type::Brick_Basic_Yellow;
+			t.type = Tile::Type::Brick_Nuke;
 		} else if (tileType == 4) {
-			t.type = Tile::Type::Brick_Basic_Blue;
+			t.type = Tile::Type::Brick_Nuke;
 		} else if (tileType == 5) {
 			t.type = Tile::Type::Brick_Basic_Purple;
 		}
@@ -139,6 +141,9 @@ void JumpGame::checkCollision() {
 		auto prj = *iter;
 		
 		if (prj->borders().intersects(character->borders())) {
+			if (prj->getType() == Tile::Type::Brick_Nuke) {
+				gotNuked = true;			
+			}
 			prj->destroy();
 			return;
 		}

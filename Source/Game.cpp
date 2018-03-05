@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-Game::Game(sf::RenderWindow& win, sf::View& vw) : window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), points(0), upperBorder(40), lowerBorder(200), ballSpeedScale(1) {
+Game::Game(sf::RenderWindow& win, sf::View& vw) : window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), gotNuked(false), points(0), upperBorder(40), lowerBorder(200), ballSpeedScale(1) {
 	txtManager = std::make_shared<TextureManager>(TextureManager());
 	
 	window.setView(view);
@@ -38,9 +38,11 @@ bool Game::processInput(sf::Event& event) {
 	return true;
 }
 
-bool Game::update(sf::Time delta) {
+ExitState Game::update(sf::Time delta) {
 	if (gameOver) {
-		return false;
+		return ExitState::GameOver;
+	} else if (gotNuked) {
+		return ExitState::Nuked;
 	} else {
 		paddle->update(delta);
 		ball->update(delta);
@@ -66,7 +68,7 @@ bool Game::update(sf::Time delta) {
 			nextLevel();
 		}
 	
-		return true;
+		return ExitState::Running;
 	}
 }
 
@@ -248,6 +250,10 @@ void Game::checkCollisions() {
 				return;
 			}
 			
+			if (br->getType() == Tile::Type::Brick_Nuke) {
+				gotNuked = true;
+			}
+			
 			// MARK: Brick Collisions - Bomb
 			if (br->getType() == Tile::Type::Brick_Bomb) {
 			// - Compare to all others. Figure out which ones are adjacent.
@@ -265,6 +271,7 @@ void Game::checkCollisions() {
 					}
 				}
 			}
+
 			br->destroy();
 			return;
 		}

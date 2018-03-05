@@ -12,8 +12,8 @@ bool Menu::processInput(sf::Event& event) {
 	return true;
 }
 
-bool Menu::update(sf::Time delta) {
-	return true;
+ExitState Menu::update(sf::Time delta) {
+	return ExitState::Running;
 }
 
 void Menu::render() {

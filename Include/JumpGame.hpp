@@ -20,8 +20,9 @@ public:
 	explicit JumpGame(sf::RenderWindow&, sf::View&);
 	
 	bool processInput(sf::Event&);
-	bool update(sf::Time);
+	ExitState update(sf::Time);
 	void render();
+	void resetNuke() { gotNuked = false; };
 	
 private:
 	// There's only a single level. It's an interlude, not a full-on game.
@@ -49,6 +50,7 @@ private:
 	std::shared_ptr<TextureManager> txtManager;
 	
 	bool gameOver;
+	bool gotNuked;
 };
 
 #endif
