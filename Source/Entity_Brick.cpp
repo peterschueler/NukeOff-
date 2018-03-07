@@ -172,3 +172,7 @@ void Entity_Brick::updateValue(Tile::Type type) {
 		value = 0;
 	}
 }
+
+bool Entity_Brick::getCollided() const {
+	return hasCollided;
+}

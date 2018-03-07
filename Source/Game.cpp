@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <cmath>
 
 Game::Game(sf::RenderWindow& win, sf::View& vw) : window(win), view(vw), bounds(0.f, 0.f, window.getDefaultView().getSize().x, window.getDefaultView().getSize().y), gameOver(false), gotNuked(false), points(0), upperBorder(40), lowerBorder(200), ballSpeedScale(1) {
 	txtManager = std::make_shared<TextureManager>(TextureManager());
@@ -60,7 +61,7 @@ ExitState Game::update(sf::Time delta) {
 			}
 		}
 	
-		if (ball->getPosition().x > 330) {
+		if (floor(ball->getPosition().x) > 330) {
 			gameOver = true;
 		}
 	
@@ -198,11 +199,11 @@ void Game::checkCollisions() {
 	if (paddle->borders().intersects(ball->borders())) {
 		sf::Vector2f padDir = paddle->getDirection();
 		if (padDir.y == 0) {
-			ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+			ball->setDirection(floor(-ball->getDirection().x), floor(ball->getDirection().y));
 			currentBackground->setDirection(-currentBackground->getDirection().x, currentBackground->getDirection().y);
 			return;
 		} else {
-			ball->setDirection(-ball->getDirection().x, padDir.y);
+			ball->setDirection(floor(-ball->getDirection().x), padDir.y);
 			currentBackground->setDirection(-currentBackground->getDirection().x, padDir.y);
 			return;
 		}
@@ -215,13 +216,16 @@ void Game::checkCollisions() {
 		auto adjustedWidth = br->borders().width - 1;
 		auto adjustedHeight = br->borders().height - 1;
 		
-		auto left = br->borders().left + 1;
-		auto right = br->borders().left + adjustedWidth;
+		auto left = floor(br->borders().left + 1);
+		auto right = floor(br->borders().left + adjustedWidth);
 		
-		auto top = br->borders().top + 1;
-		auto bottom = br->borders().top + adjustedHeight;
+		auto top = floor(br->borders().top + 1);
+		auto bottom = floor(br->borders().top + adjustedHeight);
 		
 		if (br->borders().intersects(ball->borders())) {
+			if (br->getCollided()) {
+				return;
+			}
 			// MARK: Pointage
 			points += br->getValue();
 			
@@ -234,21 +238,25 @@ void Game::checkCollisions() {
 			ball->setSpeed(ballSpeedScale);
 		
 			// MARK: Ball Orientation
-			if (ball->getPosition().y < top && ball->getPosition().x > left && ball->getPosition().x < right) {
-				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
-				currentBackground->setDirection(currentBackground->getDirection().x, -currentBackground->getDirection().y);
-			} else if (ball->getPosition().y > bottom && ball->getPosition().x > left && ball->getPosition().x < left) {
-				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
-				currentBackground->setDirection(currentBackground->getDirection().x, -currentBackground->getDirection().y);
-			} else if (ball->getPosition().x < left && ball->getPosition().y > top && ball->getPosition().y < bottom) {
-				ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
-				currentBackground->setDirection(-currentBackground->getDirection().x, currentBackground->getDirection().y);
-			} else if (ball->getPosition().x > right && ball->getPosition().y > top && ball->getPosition().y < bottom) {
-				ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
-				currentBackground->setDirection(-currentBackground->getDirection().x, currentBackground->getDirection().y);
+			auto vecX = ball->getCenter().x - br->getCenter().x;
+			auto vecY = ball->getCenter().y - br->getCenter().y;
+			
+			int orientX = 1;
+			int orientY = 1;
+			
+			if (vecY > 0) {
+				orientY = 1;
 			} else {
-				return;
+				orientY = -1;
 			}
+			
+			if (vecX > 0) {
+				orientX = 1;
+			} else {
+				orientX = -1;
+			}
+			
+			ball->setDirection(orientX * ball->getDirection().x, orientY * ball->getDirection().y);
 			
 			if (br->getType() == Tile::Type::Brick_Nuke) {
 				gotNuked = true;
@@ -285,12 +293,12 @@ void Game::checkCollisions() {
 	for (auto iter = walls.begin(); iter != walls.end(); ++iter) {
 		auto wl = *iter;
 		if (wl->borders().intersects(ball->borders())) {
-			if (ball->getPosition().x > 35) {
-				ball->setDirection(ball->getDirection().x, -ball->getDirection().y);
+			if (floor(ball->getPosition().x) > 35) {
+				ball->setDirection(floor(ball->getDirection().x), floor(-ball->getDirection().y));
 				currentBackground->setDirection(currentBackground->getDirection().x, -currentBackground->getDirection().y);
 				return;
 			} else {
-				ball->setDirection(-ball->getDirection().x, ball->getDirection().y);
+				ball->setDirection(floor(-ball->getDirection().x), floor(ball->getDirection().y));
 				currentBackground->setDirection(-currentBackground->getDirection().x, currentBackground->getDirection().y);
 				return;
 			}

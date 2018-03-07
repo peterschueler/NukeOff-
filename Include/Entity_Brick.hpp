@@ -34,6 +34,7 @@ public:
 	Tile::Type getType() const;
 	sf::Vector2f getRelativePosition() const;
 	unsigned int getValue() const;
+	bool getCollided() const;
 	
 protected:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
