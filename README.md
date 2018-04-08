@@ -1,5 +1,5 @@
 # NukeOut!
-- Was SUpposed To Be My Entry For Game Off Jam.
+- Was Supposed To Be My Entry For Game Off Jam.
 
 - Is Now Just A Game I‘m Making.
 
@@ -10,3 +10,7 @@
 ## Technical Details
 
 Written in C++. Made with the SFML framework.
+
+## Mechanical Details
+
+There are three components: the Krakout clone, a text adventure, and a Space Invaders type game. The Nuke is the catalyst that moves the player from one type of game to another.
